@@ -9,10 +9,10 @@
 
 #include <IRsend.h>
 
+#include "PersonalInfo.h"
+
 
 ESP8266WiFiMulti WiFiMulti;
-const char wifiID[20] = "";         // Enter your wifi ID
-const char wifiPW[20] = "";         // Enter your wifi Password
 
 const int stepsPerRevolution = 200;                 // change this to fit the number of steps per revolution(+: return, -: go)
 const uint16_t driverIN[4] = {14, 12, 13, 15};      // assign motor driver IN pin
@@ -66,7 +66,7 @@ void loop() {
     HTTPClient http;
 
     Serial.println("[HTTP] begin...");
-    if (http.begin(client, "")) {                           // Enter your http page URL
+    if (http.begin(client, PersonalInfo::url)) {                           // Enter your http page URL
       Serial.println("[HTTP] GET...");
       // start connection and send HTTP header
       int httpCode = http.GET();
@@ -162,7 +162,7 @@ void loop() {
     }
   
     WiFi.mode(WIFI_STA);
-    WiFiMulti.addAP(wifiID, wifiPW);
+    WiFiMulti.addAP(PersonalInfo::wifi_id, PersonalInfo::wifi_pw);
   }
   
   delay(1000);
