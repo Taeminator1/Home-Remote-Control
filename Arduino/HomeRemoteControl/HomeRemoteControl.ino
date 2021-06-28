@@ -1,59 +1,46 @@
 #include <Arduino.h>
 
-#include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
-
 #include <Stepper.h>
-
 #include <IRsend.h>
-
 #include "PersonalInfo.h"
-
+#include "SamsungIR.h"
 
 ESP8266WiFiMulti WiFiMulti;
 
-const int stepsPerRevolution = 200;                 // change this to fit the number of steps per revolution(+: return, -: go)
-const uint16_t driverIN[4] = {14, 12, 13, 15};      // assign motor driver IN pin
-Stepper myStepper(stepsPerRevolution, driverIN[0], driverIN[1], driverIN[2], driverIN[3]);
+const int loopDelay = 1000;                         // ms
 
-const uint16_t irSend = 10;
-IRsend irsend(irSend);
+const int stepsPerRevolution = 200;                 // change this to fit the number of steps per revolution(+: return, -: go)
+const int stepSpeed = 200;    
+const int stepDelay = 1;                            // ms     
+const int driverPins[4] = {14, 12, 13, 15};         // assign GPIO pins for motor driver
+Stepper stepper(stepsPerRevolution, driverPins[0], driverPins[1], driverPins[2], driverPins[3]);
+
+const int irPin = 10;                               // assign GPIO pin for ir sensor
+IRsend irsend(irPin);
 
 // 0: end of the actuator, 1: next to the motor
-const uint16_t limitSwitch[2] = {5, 4};
-bool switchState[2] = {false, false};
+const int switchPins[2] = {5, 4};                   // assign GPIO pin for limit switch
+bool switchStates[2] = {false, false};
 
 // 0: the first web toggle, 1: the second web toggle
 bool toggle[2] = {false, false};
-bool buttonState[2] = {false, false};
-
-
-// Mesg Desc.: Power: Off, Mode: 0 (Auto), Temp: 25C, Fan: 6 (Auto), Swing: Off, Beep: Off, Clean: Off, Quiet: Off, Powerful: Off, Breeze: Off, Light: On, Ion: Off
-const uint16_t rawData[349] = {630, 17794,  3038, 8918,  542, 454,  538, 1452,  536, 480,  514, 478,  508, 486,  512, 482,  510, 484,  536, 458,  538, 456,  542, 1446,  544, 450,  542, 452,  542, 1446,  542, 1448,  542, 452,  540, 1450,  540, 1472,  516, 1474,  484, 1504,  510, 1478,  538, 454,  542, 452,  542, 452,  542, 450,  542, 452,  544, 450,  542, 452,  544, 450,  542, 454,  540, 454,  542, 454,  540, 456,  538, 478,  516, 478,  514, 480,  482, 510,  510, 484,  508, 484,  512, 482,  538, 454,  544, 450,  542, 450,  542, 452,  540, 452,  544, 452,  542, 450,  542, 452,  542, 452,  540, 456,  538, 456,  538, 480,  514, 478,  516, 478,  484, 510,  510, 1478,  536, 1452,  544, 2928,  3036, 8920,  542, 1446,  542, 452,  544, 450,  544, 452,  540, 452,  542, 454,  540, 456,  538, 456,  538, 478,  516, 1472,  486, 506,  512, 482,  536, 1450,  540, 454,  540, 1448,  542, 1446,  544, 1444,  542, 1446,  542, 1448,  542, 1448,  538, 458,  538, 476,  516, 478,  516, 478,  510, 484,  512, 482,  510, 484,  540, 454,  542, 452,  542, 450,  544, 450,  542, 452,  542, 450,  542, 450,  544, 452,  542, 452,  540, 454,  540, 454,  540, 456,  538, 478,  516, 478,  516, 480,  510, 484,  512, 482,  540, 456,  540, 452,  542, 450,  544, 450,  542, 450,  544, 450,  544, 450,  544, 450,  542, 452,  544, 452,  542, 452,  542, 454,  534, 2954,  3012, 8948,  520, 1470,  510, 484,  510, 482,  538, 456,  538, 454,  540, 454,  544, 450,  542, 452,  544, 450,  542, 1446,  544, 450,  544, 450,  544, 452,  542, 1450,  538, 1450,  538, 1472,  484, 510,  510, 1478,  538, 1452,  540, 1448,  542, 1446,  542, 1446,  544, 1444,  542, 1446,  542, 1448,  540, 456,  538, 454,  538, 478,  516, 1472,  512, 1476,  538, 1450,  540, 452,  544, 450,  544, 450,  542, 450,  544, 452,  544, 1444,  542, 452,  544, 452,  542, 1448,  540, 1448,  540, 478,  516, 1472,  484, 1502,  538, 456,  540, 454,  540, 452,  542, 450,  544, 450,  544, 450,  544, 450,  544, 450,  542, 454,  542, 452,  542, 1448,  540, 1450,  560};
-// Mesg Desc.: Power: On, Mode: 1 (Cool), Temp: 20C, Fan: 5 (High), Swing: Off, Beep: Off, Clean: Off, Quiet: Off, Powerful: Off, Breeze: Off, Light: On, Ion: Off
-const uint8_t state[1][14] = {
-  { 0x02, 0x92, 0x0F, 0x00, 0x00, 0x00, 0xF0, 0x01, 0xC2, 0xFE, 0x71, 0x40, 0x1B, 0xF0 }
-};
-
+bool buttonStates[2] = {false, false};
     
 void setup() {
 
   Serial.begin(115200);
   Serial.println();
-  
-//  pinMode(LED_BUILTIN, OUTPUT);
-//  digitalWrite(LED_BUILTIN, 0);     // turn on the LED Indicator in NodeMCU
 
-  myStepper.setSpeed(200);
+  stepper.setSpeed(stepSpeed);
 
   for(int i = 0; i < 2; i++)
-    pinMode(limitSwitch[i], INPUT);
+    pinMode(switchPins[i], INPUT);
 
   for(int i = 0; i < 4; i++) {
-    pinMode(driverIN[i], OUTPUT);
-    digitalWrite(driverIN[i], HIGH);
+    pinMode(driverPins[i], OUTPUT);
+    digitalWrite(driverPins[i], HIGH);
   }
   
   irsend.begin();
@@ -66,7 +53,7 @@ void loop() {
     HTTPClient http;
 
     Serial.println("[HTTP] begin...");
-    if (http.begin(client, PersonalInfo::url)) {                           // Enter your http page URL
+    if (http.begin(client, PersonalInfo::url)) {  // HTTP
       Serial.println("[HTTP] GET...");
       // start connection and send HTTP header
       int httpCode = http.GET();
@@ -92,8 +79,8 @@ void loop() {
               String buff = "false";
               buff = payload.substring(i + 10, i + 15);
               
-              if (buff == "true ")  buttonState[index] = true;
-              else                  buttonState[index] = false;
+              if (buff == "true ")  buttonStates[index] = true;
+              else                  buttonStates[index] = false;
               
               index++;
               if (index == 2) {
@@ -103,11 +90,11 @@ void loop() {
             }
           }
 
-          if (buttonState[0] == true && toggle[0] == false) {
+          if (buttonStates[0] == true && toggle[0] == false) {
             toggle[0] = true;
-            while (switchState[0] == 0) {     // go to the end of the actuator
-              myStepper.step(-stepsPerRevolution);
-              switchState[0] = digitalRead(limitSwitch[0]);
+            while (switchStates[0] == 0) {     // go to the end of the actuator
+              stepper.step(-stepsPerRevolution);
+              switchStates[0] = digitalRead(switchPins[0]);
               delay(1);
             }
 
@@ -115,34 +102,34 @@ void loop() {
             
             // Need to code
             
-            while (switchState[1] == 0) {     // return to the motor
-              myStepper.step(stepsPerRevolution);
-              switchState[1] = digitalRead(limitSwitch[1]);
-              delay(1);
+            while (switchStates[1] == 0) {     // return to the motor
+              stepper.step(stepsPerRevolution);
+              switchStates[1] = digitalRead(switchPins[1]);
+              delay(stepDelay);
             }
             for (int i = 0; i < 3; i++) {     // for margin away motor
-              myStepper.step(-stepsPerRevolution);
-              delay(1);
+              stepper.step(-stepsPerRevolution);
+              delay(stepDelay);
             }
 
             for (int i = 0; i < 4; i++)
-              digitalWrite(driverIN[i], HIGH);
+              digitalWrite(driverPins[i], HIGH);
           }
-          else if (buttonState[0] == false) {
+          else if (buttonStates[0] == false) {
             toggle[0] = false;
             for (int i = 0; i < 2; i++)
-              switchState[i] = digitalRead(limitSwitch[i]);
+              switchStates[i] = digitalRead(switchPins[i]);
           }
 
-          if (buttonState[1] == true && toggle[1] == false) {
+          if (buttonStates[1] == true && toggle[1] == false) {
             toggle[1] = true;
             Serial.println("Turn on the air conditional");
-            irsend.sendSamsungAC(state[0]);
+            irsend.sendSamsungAC(SamsungIR::state[0]);
           }
-          else if(buttonState[1] == false && toggle[1] == true) {
+          else if(buttonStates[1] == false && toggle[1] == true) {
             toggle[1] = false;
             Serial.println("Turn off the air conditional");
-            irsend.sendRaw(rawData, 349, 38);
+            irsend.sendRaw(SamsungIR::rawData, 349, 38);
           }
         }
       } else {
@@ -155,15 +142,13 @@ void loop() {
       Serial.println("[HTTP} Unable to connect");
     }
   } else {        // for connection to Wi-Fi
-    for (uint8_t t = 4; t > 0; t--) {
-      Serial.printf("[SETUP] WAIT %d...\n", t);
-      Serial.flush();
-      delay(1000);
-    }
+    Serial.printf("[SETUP] WAIT ...\n");
+    Serial.flush();
+    delay(loopDelay);
   
     WiFi.mode(WIFI_STA);
     WiFiMulti.addAP(PersonalInfo::wifi_id, PersonalInfo::wifi_pw);
   }
   
-  delay(1000);
+  delay(loopDelay);
 }
