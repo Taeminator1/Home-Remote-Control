@@ -7,6 +7,8 @@
 #include "PersonalInfo.h"
 #include "SamsungIR.h"
 
+#define BUTTONS_COUNT 2
+
 ESP8266WiFiMulti WiFiMulti;
 
 const int loopDelay = 1000;                         // ms
@@ -22,11 +24,11 @@ IRsend irsend(irPin);
 
 // 0: end of the actuator, 1: next to the motor
 const int switchPins[2] = {5, 4};                   // assign GPIO pin for limit switch
-bool switchStates[2] = {false, false};
+bool switchStates[2] = {false, };
 
-// 0: the first web toggle, 1: the second web toggle
-bool toggle[2] = {false, false};
-bool buttonStates[2] = {false, false};
+// 0: the first web toggles, 1: the second web toggles
+bool toggles[BUTTONS_COUNT] = {false, };
+bool buttonStates[BUTTONS_COUNT] = {false, };
     
 void setup() {
 
@@ -34,16 +36,15 @@ void setup() {
   Serial.println();
 
   stepper.setSpeed(stepSpeed);
-
-  for(int i = 0; i < 2; i++)
-    pinMode(switchPins[i], INPUT);
-
   for(int i = 0; i < 4; i++) {
     pinMode(driverPins[i], OUTPUT);
     digitalWrite(driverPins[i], HIGH);
   }
-  
+
   irsend.begin();
+  
+  for(int i = 0; i < 2; i++)
+    pinMode(switchPins[i], INPUT);
 }
 
 void loop() {
@@ -55,6 +56,7 @@ void loop() {
     Serial.println("[HTTP] begin...");
     if (http.begin(client, PersonalInfo::url)) {  // HTTP
       Serial.println("[HTTP] GET...");
+      
       // start connection and send HTTP header
       int httpCode = http.GET();
 
@@ -66,32 +68,23 @@ void loop() {
         // file found at server
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
           String payload = http.getString();
-
+          
           int index = 0;
           for (int i = 0; i < payload.length(); i++) {
-            if (payload.charAt(i) == '\"' && 
-                payload.charAt(i + 1) == 'l' && 
-                payload.charAt(i + 2) == 'a' && 
-                payload.charAt(i + 3) == 'b' && 
-                payload.charAt(i + 4) == 'e' && 
-                payload.charAt(i + 5) == 'l') {
+            if (payload.substring(i, i + 6) == "\"label") {           // find string starting with "\"label" in HTML
                   
               String buff = "false";
               buff = payload.substring(i + 10, i + 15);
               
-              if (buff == "true ")  buttonStates[index] = true;
-              else                  buttonStates[index] = false;
+              if (buff == "true ")  buttonStates[index++] = true;
+              else                  buttonStates[index++] = false;
               
-              index++;
-              if (index == 2) {
-                index = 0;
-                break;
-              }
+              if (index == BUTTONS_COUNT) break;
             }
           }
 
-          if (buttonStates[0] == true && toggle[0] == false) {
-            toggle[0] = true;
+          if (buttonStates[0] == true && toggles[0] == false) {
+            toggles[0] = true;
             while (switchStates[0] == 0) {     // go to the end of the actuator
               stepper.step(-stepsPerRevolution);
               switchStates[0] = digitalRead(switchPins[0]);
@@ -116,18 +109,18 @@ void loop() {
               digitalWrite(driverPins[i], HIGH);
           }
           else if (buttonStates[0] == false) {
-            toggle[0] = false;
-            for (int i = 0; i < 2; i++)
+            toggles[0] = false;
+            for (int i = 0; i < BUTTONS_COUNT; i++)
               switchStates[i] = digitalRead(switchPins[i]);
           }
 
-          if (buttonStates[1] == true && toggle[1] == false) {
-            toggle[1] = true;
+          if (buttonStates[1] == true && toggles[1] == false) {
+            toggles[1] = true;
             Serial.println("Turn on the air conditional");
             irsend.sendSamsungAC(SamsungIR::state[0]);
           }
-          else if(buttonStates[1] == false && toggle[1] == true) {
-            toggle[1] = false;
+          else if(buttonStates[1] == false && toggles[1] == true) {
+            toggles[1] = false;
             Serial.println("Turn off the air conditional");
             irsend.sendRaw(SamsungIR::rawData, 349, 38);
           }
