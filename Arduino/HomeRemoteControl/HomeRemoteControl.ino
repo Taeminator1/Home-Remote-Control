@@ -1,5 +1,10 @@
-#include <Arduino.h>
+#define BUTTONS_COUNT 2
+#define LOOP_DEALY 1000                             // ms
+#define STEPS_PER_REVOLUTION 200
+#define STEP_SPEED 200
+#define STEP_DELAY 1                                // ms
 
+#include <Arduino.h>
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
 #include <Stepper.h>
@@ -7,17 +12,10 @@
 #include "PersonalInfo.h"
 #include "SamsungIR.h"
 
-#define BUTTONS_COUNT 2
-
 ESP8266WiFiMulti WiFiMulti;
-
-const int loopDelay = 1000;                         // ms
-
-const int stepsPerRevolution = 200;                 // change this to fit the number of steps per revolution(+: return, -: go)
-const int stepSpeed = 200;    
-const int stepDelay = 1;                            // ms     
+     
 const int driverPins[4] = {14, 12, 13, 15};         // assign GPIO pins for motor driver
-Stepper stepper(stepsPerRevolution, driverPins[0], driverPins[1], driverPins[2], driverPins[3]);
+Stepper stepper(STEPS_PER_REVOLUTION, driverPins[0], driverPins[1], driverPins[2], driverPins[3]);
 
 const int irPin = 10;                               // assign GPIO pin for ir sensor
 IRsend irsend(irPin);
@@ -26,16 +24,18 @@ IRsend irsend(irPin);
 const int switchPins[2] = {5, 4};                   // assign GPIO pin for limit switch
 bool switchStates[2] = {false, };
 
-// 0: the first web toggles, 1: the second web toggles
-bool toggles[BUTTONS_COUNT] = {false, };
-bool buttonStates[BUTTONS_COUNT] = {false, };
+// 0: the first web toggle state(motor driver)
+// 1: the second web toggle state(ir sender)
+bool inToggleStates[BUTTONS_COUNT] = {false, };     // store data in NodeMCU
+bool exToggleStates[BUTTONS_COUNT] = {false, };     // get data from web page
+
+//Toggle toggles[BUTTONS_COUNT];
     
 void setup() {
-
   Serial.begin(115200);
   Serial.println();
 
-  stepper.setSpeed(stepSpeed);
+  stepper.setSpeed(STEP_SPEED);
   for(int i = 0; i < 4; i++) {
     pinMode(driverPins[i], OUTPUT);
     digitalWrite(driverPins[i], HIGH);
@@ -70,57 +70,42 @@ void loop() {
           String payload = http.getString();
           
           int index = 0;
-          for (int i = 0; i < payload.length(); i++) {
+          for (int i = 0; i < payload.length() - 6; i++) {
             if (payload.substring(i, i + 6) == "\"label") {           // find string starting with "\"label" in HTML
                   
               String buff = "false";
               buff = payload.substring(i + 10, i + 15);
               
-              if (buff == "true ")  buttonStates[index++] = true;
-              else                  buttonStates[index++] = false;
+              if (buff == "true ")  inToggleStates[index++] = true;
+              else                  inToggleStates[index++] = false;
               
               if (index == BUTTONS_COUNT) break;
             }
           }
 
-          if (buttonStates[0] == true && toggles[0] == false) {
-            toggles[0] = true;
-            while (switchStates[0] == 0) {     // go to the end of the actuator
-              stepper.step(-stepsPerRevolution);
-              switchStates[0] = digitalRead(switchPins[0]);
-              delay(1);
-            }
-
-            // after closing the window, decide whether turn on or off air conditoner
+          if (inToggleStates[0] == true && exToggleStates[0] == false) {
+            exToggleStates[0] = true;
             
-            // Need to code
-            
-            while (switchStates[1] == 0) {     // return to the motor
-              stepper.step(stepsPerRevolution);
-              switchStates[1] = digitalRead(switchPins[1]);
-              delay(stepDelay);
-            }
-            for (int i = 0; i < 3; i++) {     // for margin away motor
-              stepper.step(-stepsPerRevolution);
-              delay(stepDelay);
-            }
+            rotateMotor(switchStates[0], switchPins[0], -STEPS_PER_REVOLUTION);     // go to the end of the actuator
+            rotateMotor(switchStates[1], switchPins[1], STEPS_PER_REVOLUTION);      // return to the motor
+            rotateMotor(3, -STEPS_PER_REVOLUTION);                                  // for margin from motor
 
             for (int i = 0; i < 4; i++)
               digitalWrite(driverPins[i], HIGH);
           }
-          else if (buttonStates[0] == false) {
-            toggles[0] = false;
+          else if (inToggleStates[0] == false) {
+            exToggleStates[0] = false;
             for (int i = 0; i < BUTTONS_COUNT; i++)
               switchStates[i] = digitalRead(switchPins[i]);
           }
 
-          if (buttonStates[1] == true && toggles[1] == false) {
-            toggles[1] = true;
+          if (inToggleStates[1] == true && exToggleStates[1] == false) {
+            exToggleStates[1] = true;
             Serial.println("Turn on the air conditional");
             irsend.sendSamsungAC(SamsungIR::state[0]);
           }
-          else if(buttonStates[1] == false && toggles[1] == true) {
-            toggles[1] = false;
+          else if(inToggleStates[1] == false && exToggleStates[1] == true) {
+            exToggleStates[1] = false;
             Serial.println("Turn off the air conditional");
             irsend.sendRaw(SamsungIR::rawData, 349, 38);
           }
@@ -137,11 +122,26 @@ void loop() {
   } else {        // for connection to Wi-Fi
     Serial.printf("[SETUP] WAIT ...\n");
     Serial.flush();
-    delay(loopDelay);
+    delay(LOOP_DEALY);
   
     WiFi.mode(WIFI_STA);
     WiFiMulti.addAP(PersonalInfo::wifi_id, PersonalInfo::wifi_pw);
   }
   
-  delay(loopDelay);
+  delay(LOOP_DEALY);
+}
+
+void rotateMotor(bool state, int pin, int velocity) {
+  while (state == 0) {
+    stepper.step(velocity);
+    state = digitalRead(pin);
+    delay(STEP_DELAY);
+  }
+}
+
+void rotateMotor(int repeat, int velocity) {
+  for (int i = 0; i < repeat; i++) {
+    stepper.step(-STEPS_PER_REVOLUTION);
+    delay(STEP_DELAY);
+  }
 }
