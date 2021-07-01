@@ -1,3 +1,5 @@
+.DS_Store
+
 #Xcode 프로젝트에 사용되는 개인 정보에 관련된 파일의 commit 무시
 Xcode/HRC/PersonalInfo.swift
 
