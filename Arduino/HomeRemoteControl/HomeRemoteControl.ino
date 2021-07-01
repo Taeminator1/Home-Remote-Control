@@ -11,6 +11,7 @@
 #include <IRsend.h>
 #include "PersonalInfo.h"
 #include "SamsungIR.h"
+#include "Toggle.h"
 
 ESP8266WiFiMulti WiFiMulti;
      
@@ -18,18 +19,13 @@ const int driverPins[4] = {14, 12, 13, 15};         // assign GPIO pins for moto
 Stepper stepper(STEPS_PER_REVOLUTION, driverPins[0], driverPins[1], driverPins[2], driverPins[3]);
 
 const int irPin = 10;                               // assign GPIO pin for ir sensor
-IRsend irsend(irPin);
+IRsend irSend(irPin);
 
 // 0: end of the actuator, 1: next to the motor
 const int switchPins[2] = {5, 4};                   // assign GPIO pin for limit switch
 bool switchStates[2] = {false, };
 
-// 0: the first web toggle state(motor driver)
-// 1: the second web toggle state(ir sender)
-bool inToggleStates[BUTTONS_COUNT] = {false, };     // store data in NodeMCU
-bool exToggleStates[BUTTONS_COUNT] = {false, };     // get data from web page
-
-//Toggle toggles[BUTTONS_COUNT];
+Toggle toggles[BUTTONS_COUNT];
     
 void setup() {
   Serial.begin(115200);
@@ -41,7 +37,7 @@ void setup() {
     digitalWrite(driverPins[i], HIGH);
   }
 
-  irsend.begin();
+  irSend.begin();
   
   for(int i = 0; i < 2; i++)
     pinMode(switchPins[i], INPUT);
@@ -75,40 +71,34 @@ void loop() {
                   
               String buff = "false";
               buff = payload.substring(i + 10, i + 15);
-              
-              if (buff == "true ")  inToggleStates[index++] = true;
-              else                  inToggleStates[index++] = false;
+
+              if (buff == "true ")  { toggles[index++].setExternalState(true); }
+              else                  { toggles[index++].setExternalState(false); }
               
               if (index == BUTTONS_COUNT) break;
             }
           }
 
-          if (inToggleStates[0] == true && exToggleStates[0] == false) {
-            exToggleStates[0] = true;
-            
-            rotateMotor(switchStates[0], switchPins[0], -STEPS_PER_REVOLUTION);     // go to the end of the actuator
-            rotateMotor(switchStates[1], switchPins[1], STEPS_PER_REVOLUTION);      // return to the motor
-            rotateMotor(3, -STEPS_PER_REVOLUTION);                                  // for margin from motor
+          // Action For Stepper
+          if (toggles[0].isTurnedOn()) {
+            Serial.println("ddd");
+            rotateMotorWithSwitch(switchPins[0], -STEPS_PER_REVOLUTION);     // go to the end of the actuator
+            rotateMotorWithSwitch(switchPins[1], STEPS_PER_REVOLUTION);      // return to the motor
+            rotateMotorRepeatedly(3, -STEPS_PER_REVOLUTION);                 // for margin from motor
 
             for (int i = 0; i < 4; i++)
               digitalWrite(driverPins[i], HIGH);
           }
-          else if (inToggleStates[0] == false) {
-            exToggleStates[0] = false;
+          else if (toggles[0].isTurnedOff()) {
             for (int i = 0; i < BUTTONS_COUNT; i++)
               switchStates[i] = digitalRead(switchPins[i]);
           }
 
-          if (inToggleStates[1] == true && exToggleStates[1] == false) {
-            exToggleStates[1] = true;
-            Serial.println("Turn on the air conditional");
-            irsend.sendSamsungAC(SamsungIR::state[0]);
-          }
-          else if(inToggleStates[1] == false && exToggleStates[1] == true) {
-            exToggleStates[1] = false;
-            Serial.println("Turn off the air conditional");
-            irsend.sendRaw(SamsungIR::rawData, 349, 38);
-          }
+          // Action for IRSender
+          if (toggles[1].isTurnedOn())
+            irSend.sendSamsungAC(SamsungIR::state[0]);
+          else if(toggles[1].isTurnedOff())
+            irSend.sendRaw(SamsungIR::rawData, 349, 38);
         }
       } else {
         Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
@@ -131,17 +121,17 @@ void loop() {
   delay(LOOP_DEALY);
 }
 
-void rotateMotor(bool state, int pin, int velocity) {
-  while (state == 0) {
-    stepper.step(velocity);
-    state = digitalRead(pin);
-    delay(STEP_DELAY);
-  }
+void rotateMotor(int velocity) {
+  stepper.step(velocity);
+  delay(STEP_DELAY);
 }
 
-void rotateMotor(int repeat, int velocity) {
-  for (int i = 0; i < repeat; i++) {
-    stepper.step(-STEPS_PER_REVOLUTION);
-    delay(STEP_DELAY);
-  }
+void rotateMotorWithSwitch(int switchPin, int velocity) {
+  while (digitalRead(switchPin) == 0)
+    rotateMotor(velocity);
+}
+
+void rotateMotorRepeatedly(int repeatNumber, int velocity) {
+  for (int i = 0; i < repeatNumber; i++)
+    rotateMotor(velocity);
 }
