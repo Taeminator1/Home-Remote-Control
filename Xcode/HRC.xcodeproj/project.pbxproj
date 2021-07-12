@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3443ECC6269C627A0095CADD /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3443ECC5269C627A0095CADD /* Extension.swift */; };
 		34ABF8B32667DE7500BC055D /* HRCApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ABF8B22667DE7500BC055D /* HRCApp.swift */; };
 		34ABF8B52667DE7500BC055D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ABF8B42667DE7500BC055D /* ContentView.swift */; };
 		34ABF8B72667DE7800BC055D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ABF8B62667DE7800BC055D /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3443ECC5269C627A0095CADD /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		34ABF8AF2667DE7500BC055D /* HRC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HRC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ABF8B22667DE7500BC055D /* HRCApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HRCApp.swift; sourceTree = "<group>"; };
 		34ABF8B42667DE7500BC055D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				34ABF8B42667DE7500BC055D /* ContentView.swift */,
 				34ABF8C22667DEBA00BC055D /* ToggleView.swift */,
 				34BFCE1D26866028001344E8 /* PersonalInfo.swift */,
+				3443ECC5269C627A0095CADD /* Extension.swift */,
 				34ABF8B62667DE7800BC055D /* Assets.xcassets */,
 				34ABF8BB2667DE7800BC055D /* Info.plist */,
 				34ABF8B82667DE7800BC055D /* Preview Content */,
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3443ECC6269C627A0095CADD /* Extension.swift in Sources */,
 				34ABF8B52667DE7500BC055D /* ContentView.swift in Sources */,
 				34BFCE1E26866028001344E8 /* PersonalInfo.swift in Sources */,
 				34ABF8C32667DEBA00BC055D /* ToggleView.swift in Sources */,

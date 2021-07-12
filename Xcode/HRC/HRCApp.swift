@@ -10,7 +10,7 @@ import WebKit
 
 @main
 struct HRCApp: App {
-    static let url: String = ""
+    static let url: String = PersonalInfo.url
     
     static let wkWebView = WKWebView()
     static let request: URLRequest = URLRequest.init(url: NSURL.init(string: HRCApp.url)! as URL)
@@ -44,22 +44,10 @@ struct HRCApp: App {
             
             if let htmlFromURL = String(data: data, encoding: .utf8) {
                 for i in 0 ... htmlFromURL.count {
-                    // HTML문에서 "label 찾기
-                    if htmlFromURL[htmlFromURL.index(htmlFromURL.startIndex, offsetBy: i)] == "\"" &&
-                        htmlFromURL[htmlFromURL.index(htmlFromURL.startIndex, offsetBy: i + 1)] == "l" &&
-                        htmlFromURL[htmlFromURL.index(htmlFromURL.startIndex, offsetBy: i + 2)] == "a" &&
-                        htmlFromURL[htmlFromURL.index(htmlFromURL.startIndex, offsetBy: i + 3)] == "b" &&
-                        htmlFromURL[htmlFromURL.index(htmlFromURL.startIndex, offsetBy: i + 4)] == "e" &&
-                        htmlFromURL[htmlFromURL.index(htmlFromURL.startIndex, offsetBy: i + 5)] == "l" {
-                    
-                        let range = htmlFromURL.index(htmlFromURL.startIndex, offsetBy: i + 10)..<htmlFromURL.index(htmlFromURL.startIndex, offsetBy: i + 15)
-                    
-                        if htmlFromURL[range] == "true " {
-                            HRCApp.buttonStates[index] = true
-                        } else {
-                            HRCApp.buttonStates[index] = false
-                        }
+                    if htmlFromURL[i ..< (i + 6)] == "\"label" {
                         
+                        HRCApp.buttonStates[index] = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
+                    
                         index += 1
                         if index == 2 { break }
                     }
