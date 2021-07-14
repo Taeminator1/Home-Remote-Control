@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct ContentView: View {
+    @Binding var isConnected: Bool
     
     var buttonNames: [String] = ["Close the window", "Turn on the airconditioner"]
     
@@ -19,13 +20,13 @@ struct ContentView: View {
                     HStack {
                         Text("Connection")
                         Spacer()
-                        HRCApp.isConnected == true ? Text("OK") : Text("Fail")
+                        isConnected == true ? Text("OK") : Text("Fail")
                     }
                 }
                 Section(header: Text("Control")) {
                     ForEach(0 ..< 2) { index in
                         ToggleView(isChecked: HRCApp.buttonStates[index], index: index, toggleName: buttonNames[index])
-                            .disabled(!HRCApp.isConnected)
+                            .disabled(!isConnected)
                     }
                 }
             }
@@ -43,6 +44,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(isConnected: .constant(true))
     }
 }

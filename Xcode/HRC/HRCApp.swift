@@ -16,11 +16,11 @@ struct HRCApp: App {
     static let request: URLRequest = URLRequest.init(url: NSURL.init(string: HRCApp.url)! as URL)
     
     static var buttonStates: [Bool] = [false, false]
-    static var isConnected: Bool = true
+    @State var isConnected: Bool = true
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(isConnected: $isConnected)
                 .onAppear() {
                     fetchData(url: HRCApp.url)
                     HRCApp.wkWebView.load(HRCApp.request)
@@ -31,14 +31,12 @@ struct HRCApp: App {
     }
     
     func fetchData(url: String) -> Void {
-        
         var index: Int = 0
         
         let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-            
             guard let data = data else {
                 print(String(describing: error))
-                HRCApp.isConnected = false
+                isConnected = false
                 return
             }
             
