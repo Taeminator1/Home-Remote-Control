@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-
 struct ContentView: View {
     @Binding var isConnected: Bool
+    @State var refresh = Refresh(started: false, released: false)
     
     var buttonNames: [String] = ["Close the window", "Turn on the airconditioner"]
     
@@ -29,15 +29,42 @@ struct ContentView: View {
                             .disabled(!isConnected)
                     }
                 }
+                .background(GeometryReader { reader -> Color in
+                        DispatchQueue.main.async {
+                            if refresh.startOffset == 0 {
+                                refresh.startOffset = reader.frame(in: .global).minY
+                            }
+                            
+                            refresh.offset = reader.frame(in: .global).minY
+                            
+                            if refresh.offset - refresh.startOffset > 80 && !refresh.started {
+                                refresh.started = true
+                                print("A")
+                            }
+                            
+                            // checking if refresh is started and drag is released ...
+                            if refresh.startOffset == refresh.offset && refresh.started && !refresh.released {
+                                withAnimation(Animation.linear) {
+                                    refresh.released = true
+                                }
+                                print("B")
+                                refresh.refresh()
+                            }
+                            
+                            // checking if invalid becomes valid ...
+                            if refresh.startOffset == refresh.offset && refresh.started && refresh.released && refresh.invalid {
+                                refresh.invalid = false
+                                print("C")
+                                refresh.refresh()
+                            }
+                        }
+                        return Color.clear
+                })
             }
             .listStyle(InsetGroupedListStyle())
             .navigationTitle("HRC")
-//            .navigationBarTitleDisplayMode(.large)
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear() {
-            
-        }
     }
 }
 
