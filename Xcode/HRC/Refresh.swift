@@ -13,15 +13,4 @@ struct Refresh {
     var started: Bool
     var released: Bool
     var invalid: Bool = false
-    
-    mutating func refresh() {
-        if startOffset ==  offset {
-            print("Refreshed")
-            released = false
-            started = false
-        }
-        else {
-            invalid = true
-        }
-    }
 }

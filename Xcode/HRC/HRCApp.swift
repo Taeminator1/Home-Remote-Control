@@ -16,7 +16,7 @@ struct HRCApp: App {
     static let request: URLRequest = URLRequest.init(url: NSURL.init(string: HRCApp.url)! as URL)
     
     static var buttonStates: [Bool] = [false, false]
-    @State var isConnected: Bool = true
+    @State var isConnected: Bool = false
     
     var body: some Scene {
         WindowGroup {
@@ -40,6 +40,7 @@ struct HRCApp: App {
                 return
             }
             
+            isConnected = true
             if let htmlFromURL = String(data: data, encoding: .utf8) {
                 for i in 0 ... htmlFromURL.count {
                     if htmlFromURL[i ..< (i + 6)] == "\"label" {

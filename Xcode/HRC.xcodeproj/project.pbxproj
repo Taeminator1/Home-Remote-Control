@@ -64,11 +64,11 @@
 				34ABF8B42667DE7500BC055D /* ContentView.swift */,
 				34ABF8C22667DEBA00BC055D /* ToggleView.swift */,
 				34BFCE1D26866028001344E8 /* PersonalInfo.swift */,
+				34813BB826A4587C0039FD6C /* Refresh.swift */,
 				3443ECC5269C627A0095CADD /* Extension.swift */,
 				34ABF8B62667DE7800BC055D /* Assets.xcassets */,
 				34ABF8BB2667DE7800BC055D /* Info.plist */,
 				34ABF8B82667DE7800BC055D /* Preview Content */,
-				34813BB826A4587C0039FD6C /* Refresh.swift */,
 			);
 			path = HRC;
 			sourceTree = "<group>";

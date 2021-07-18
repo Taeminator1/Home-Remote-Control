@@ -48,14 +48,14 @@ struct ContentView: View {
                                     refresh.released = true
                                 }
                                 print("B")
-                                refresh.refresh()
+                                abc()
                             }
                             
                             // checking if invalid becomes valid ...
                             if refresh.startOffset == refresh.offset && refresh.started && refresh.released && refresh.invalid {
                                 refresh.invalid = false
                                 print("C")
-                                refresh.refresh()
+                                abc()
                             }
                         }
                         return Color.clear
@@ -65,6 +65,52 @@ struct ContentView: View {
             .navigationTitle("HRC")
         }
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+    
+    func abc() {
+        if refresh.startOffset ==  refresh.offset {
+            print("Refreshed")
+            def()
+            
+            refresh.released = false
+            refresh.started = false
+        }
+        else {
+            refresh.invalid = true
+        }
+    }
+    
+    func def() {
+        fetchData(url: HRCApp.url)
+        print("Connection: \(isConnected)")
+        print("button1: \(HRCApp.buttonStates[0])")
+        print("button2: \(HRCApp.buttonStates[1])")
+    }
+    
+    func fetchData(url: String) -> Void {
+        var index: Int = 0
+        
+        let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+            guard let data = data else {
+                print(String(describing: error))
+                isConnected = false
+                return
+            }
+            
+            isConnected = true
+            if let htmlFromURL = String(data: data, encoding: .utf8) {
+                for i in 0 ... htmlFromURL.count {
+                    if htmlFromURL[i ..< (i + 6)] == "\"label" {
+                        
+                        HRCApp.buttonStates[index] = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
+                    
+                        index += 1
+                        if index == 2 { break }
+                    }
+                }
+            }
+        }
+        task.resume()
     }
 }
 
