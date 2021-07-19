@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Binding var isConnected: Bool
-    @Binding var buttonStates: [Bool]
+    @State var isConnected: Bool = false
+    @State var buttonStates: [Bool] = [false, false]
     
     @State var refresh = Refresh(started: false, released: false)
     
@@ -26,7 +26,7 @@ struct ContentView: View {
                     }
                 }
                 Section(header: Text("Control")) {
-                    ForEach(0 ..< buttonNames.count) {
+                    ForEach(0 ..< buttonStates.count) {
                         ToggleView(isChecked: $buttonStates[$0], index: $0, toggleName: buttonNames[$0])
                             .disabled(!isConnected)
                     }
@@ -44,27 +44,30 @@ struct ContentView: View {
             .navigationTitle("HRC")
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear() {
+            fetchData(url: HRCApp.url)
+        }
     }
     
     func fetchData(url: String) -> Void {
         var index: Int = 0
-
+        
         let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
             guard let data = data else {
                 print(String(describing: error))
                 isConnected = false
                 return
             }
-
+            
             isConnected = true
             if let htmlFromURL = String(data: data, encoding: .utf8) {
                 for i in 0 ... htmlFromURL.count {
                     if htmlFromURL[i ..< (i + 6)] == "\"label" {
-
+                        
                         buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
-
+                    
                         index += 1
-                        if index == 2 { break }
+                        if index == buttonStates.count { break }
                     }
                 }
             }
@@ -75,6 +78,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(isConnected: .constant(true), buttonStates: .constant([false, true]))
+        ContentView()
     }
 }
