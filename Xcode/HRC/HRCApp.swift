@@ -15,12 +15,12 @@ struct HRCApp: App {
     static let wkWebView = WKWebView()
     static let request: URLRequest = URLRequest.init(url: NSURL.init(string: HRCApp.url)! as URL)
     
-    static var buttonStates: [Bool] = [false, false]
     @State var isConnected: Bool = false
+    @State var buttonStates: [Bool] = [false, false]
     
     var body: some Scene {
         WindowGroup {
-            ContentView(isConnected: $isConnected)
+            ContentView(isConnected: $isConnected, buttonStates: $buttonStates)
                 .onAppear() {
                     fetchData(url: HRCApp.url)
                     HRCApp.wkWebView.load(HRCApp.request)
@@ -45,7 +45,7 @@ struct HRCApp: App {
                 for i in 0 ... htmlFromURL.count {
                     if htmlFromURL[i ..< (i + 6)] == "\"label" {
                         
-                        HRCApp.buttonStates[index] = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
+                        buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
                     
                         index += 1
                         if index == 2 { break }
