@@ -14,8 +14,12 @@ class ViewController: NSViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        if let path = Bundle.main.path(forResource: "test", ofType: "txt") {
-            NSWorkspace.shared.openFile(path, withApplication: "TextEdit")
+//        if let path = Bundle.main.path(forResource: "test", ofType: "txt") {
+//            NSWorkspace.shared.openFile(path, withApplication: "TextEdit")
+//        }
+        
+        if let path = Bundle.main.path(forResource: "script", ofType: "command") {
+            NSWorkspace.shared.openFile(path, withApplication: "Terminal")
         }
     }
 
