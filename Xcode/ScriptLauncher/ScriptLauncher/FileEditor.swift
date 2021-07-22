@@ -9,54 +9,26 @@
 import Foundation
 
 struct FileEditor {
-    var fileName: String
-    var fileExtension: String
-    var path: String
+    var fileName: String            // 파일 이름
+    var fileExtension: String       // 파일 확장자
+    var filePath: String?           // 파일 경로
     
-    func readFile() -> String? {
-        let userURL = try! FileManager.default.url(for: .userDirectory, in: .localDomainMask, appropriateFor: nil, create: false)
-        let folderURL = userURL.appendingPathComponent(path)
-        let fileURL = URL(fileURLWithPath: fileName, relativeTo: folderURL).appendingPathExtension(fileExtension)
-        
-        var res: String?
-        do {
-            let data = try Data(contentsOf: fileURL)
-            if let str = String(data: data, encoding: .utf8) {
-                res = str
-            }
-        } catch {
-            print("Unaable to read \"\(fileName)\" file in Users/\(path).")
+    var path: String? {
+        guard let filePath = self.filePath else {
+            return nil
         }
-        
-        return res
+        return "\(filePath)/\(fileName).\(fileExtension)"
     }
     
-    func writeFile(contents: String, isOverwritable: Bool = false) {
-        let userURL = try! FileManager.default.url(for: .userDirectory, in: .localDomainMask, appropriateFor: nil, create: false)
-        let folderURL = userURL.appendingPathComponent(path)
+    func createFile(contents: Data?) {
+        // chmod 744 [fileName]
+        // -rwxr--r--
+        let attributes: [FileAttributeKey: Any]? = [FileAttributeKey.posixPermissions: 0o744]
         
-        if FileManager.default.fileExists(atPath: folderURL.path) {
-            let fileURL = URL(fileURLWithPath: fileName, relativeTo: folderURL).appendingPathExtension(fileExtension)
-            
-            if isOverwritable || !FileManager.default.fileExists(atPath: fileURL.path) {
-                guard let data = contents.data(using: .utf8) else {
-                    print("Unable to convert contents.")
-                    return
-                }
-                
-                do {
-                    try data.write(to: fileURL)
-                    print("File saved: \(fileURL.absoluteURL)")
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-            else {
-                print("Enable to overwrite \"\(fileName)\", Check the overwrite parameter of this method.")
-            }
+        guard let path = self.path else {
+            return
         }
-        else {
-            print("Unable to access Users/\(path).")
-        }
+        FileManager.default.createFile(atPath: path, contents: contents, attributes: attributes)
+        print("File saved: \(path)")
     }
 }

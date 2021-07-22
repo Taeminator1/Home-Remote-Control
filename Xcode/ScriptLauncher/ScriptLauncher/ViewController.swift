@@ -10,15 +10,12 @@ import Cocoa
 
 class ViewController: NSViewController {
 
-    var fileEditor = FileEditor(fileName: "script", fileExtension: "command", path: "")
+    var fileEditor = FileEditor(fileName: "script", fileExtension: "command", filePath: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
-//        print(Bundle.main.resourcePath!)
-//        print(Bundle.main.bundlePath)
-//        print(Bundle.main.executablePath!)
     }
     
     override var representedObject: Any? {
@@ -41,26 +38,18 @@ class ViewController: NSViewController {
                 if let url = openPanel.url {
                     var path: String = "\(url)"
 
-                    // path 앞의 문자열 "file:///Users" 삭제
-                    let range = path.startIndex ..< path.index(path.startIndex, offsetBy: 13)
-                    path.removeSubrange(range)
-
-                    // path 뒤의 마지막 경로 삭제
+                    // path 앞의 문자열 "file://" 삭제
+                    path.removeSubrange(path.startIndex ..< path.index(path.startIndex, offsetBy: "file://".count))
+                    
+                    // path 뒤의 선택된 파일명 + "/" 삭제
                     while path.removeLast() != "/" { }
-                    print(path)
                     
-//                    var path: String = Bundle.main.resourcePath!
-//                    // path 앞의 문자열 "/Users" 삭제
-//                    let range = path.startIndex ..< path.index(path.startIndex, offsetBy: 6)
-//                    path.removeSubrange(range)
+                    self.fileEditor.filePath = path
+                    let script: String = self.makeScript(commands: "cd \(path)", "node \(url.lastPathComponent)")
                     
-                    
-                    self.fileEditor.path = path
-                    let contents: String = """
-                    cd \(self.fileEditor.path)
-                    node \(url.lastPathComponent)
-                    """
-                    self.fileEditor.writeFile(contents: contents, isOverwritable: true)
+                    if let data = script.data(using: .utf8) {
+                        self.fileEditor.createFile(contents: data)
+                    }
                 }
             }
             else {                                              // Cancel
@@ -70,17 +59,15 @@ class ViewController: NSViewController {
     }
     
     @IBAction func launchScript(_ sender: Any) {
-        NSWorkspace.shared.openFile("/Users\(self.fileEditor.path)/script.command", withApplication: "Terminal")
+        guard let path = fileEditor.path else {
+            return
+        }
+        NSWorkspace.shared.openFile(path, withApplication: "Terminal")
+        print("File opened: \(path)")
     }
     
-    @discardableResult
-    func shell(_ args: String...) -> Int32 {
-        let task = Process()
-        task.launchPath = "/usr/bin/env"
-        task.arguments = args
-        task.launch()
-        task.waitUntilExit()
-        return task.terminationStatus
+    func makeScript(commands: String ...) -> String {
+        return commands.reduce("") { $0 + $1 + "\n" }
     }
 }
 
