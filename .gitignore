@@ -1,10 +1,10 @@
 .DS_Store
 
 #Xcode 프로젝트에 사용되는 개인 정보에 관련된 파일의 commit 무시
-Xcode/HRC/PersonalInfo.swift
+Xcode/HRC/HRC/PersonalInfo.swift
 
 #Arduino 프로젝트에 사용되는 개인 정보에 관련된 파일의 commit 무시
 Arduino/HomeRemoteControl/PersonalInfo.cpp
 
-#Node.js 프로젝트에 사용되는 data.txt 파일의 commit 무시
-Node.js/data.txt
+#서버 관련 프로젝트에 사용되는 data.txt 파일의 commit 무시
+Server/data.txt
