@@ -17,8 +17,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     let statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
-    let helperBundleName = "com.Taeminator.ScriptLauncher-Launch"       // for Opeing at Login
-    var foundHelper: Bool = true                                        // for Opeing at Login
+    // for Opening at Login
+    let helperBundleName = "com.Taeminator.ScriptLauncher-Launch"
+    var foundHelper: Bool = true
+    
+    var fileEditor = FileEditor(fileName: "script", fileExtension: "command", filePath: nil)
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -38,10 +41,46 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBAction func selectFileClicked(_ sender: Any) {
         print("Select File Clicked")
+        let openPanel = NSOpenPanel()
+        openPanel.allowsMultipleSelection = false
+        openPanel.canChooseDirectories = false
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.allowedFileTypes = ["js"]
+        
+        openPanel.begin { (result) -> Void in
+            if result == NSApplication.ModalResponse.OK {       // Select a File
+                
+                if let url = openPanel.url {
+                    var path: String = "\(url)"
+
+                    // path 앞의 문자열 "file://" 삭제
+                    path.removeSubrange(path.startIndex ..< path.index(path.startIndex, offsetBy: "file://".count))
+                    
+                    // path 뒤의 선택된 파일명 + "/" 삭제
+                    while path.removeLast() != "/" { }
+                    
+                    self.fileEditor.filePath = path
+                    let script: String = self.makeScript(commands: "cd \(path)", "node \(url.lastPathComponent)")
+                    
+                    if let data = script.data(using: .utf8) {
+                        self.fileEditor.createFile(contents: data)
+                    }
+                }
+            }
+            else {                                              // Cancel
+                
+            }
+        }
     }
     
     @IBAction func launchScriptClicked(_ sender: Any) {
         print("Launch Script Clicked")
+        guard let path = fileEditor.path else {
+            return
+        }
+        NSWorkspace.shared.openFile(path, withApplication: "Terminal")
+        print("File opened: \(path)")
     }
     
     @IBAction func openAtLoginClicked(_ sender: Any) {
@@ -60,4 +99,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return commands.reduce("") { $0 + $1 + "\n" }
     }
 }
-

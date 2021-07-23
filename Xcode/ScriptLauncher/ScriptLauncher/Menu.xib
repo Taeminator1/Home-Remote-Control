@@ -40,8 +40,7 @@
                         <action selector="openAtLoginClicked:" target="Vwc-8O-IKQ" id="vI8-2v-xwL"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Quit" id="KEs-8b-Oj6">
-                    <modifierMask key="keyEquivalentModifierMask"/>
+                <menuItem title="Quit" keyEquivalent="q" id="KEs-8b-Oj6">
                     <connections>
                         <action selector="quitClicked:" target="Vwc-8O-IKQ" id="74T-2t-euC"/>
                     </connections>
