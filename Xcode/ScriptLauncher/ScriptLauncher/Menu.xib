@@ -15,6 +15,7 @@
         <customObject id="Vwc-8O-IKQ" customClass="AppDelegate" customModule="ScriptLauncher" customModuleProvider="target">
             <connections>
                 <outlet property="menu" destination="f6m-rh-PLB" id="rNp-bx-b4M"/>
+                <outlet property="openAtLogin" destination="8ev-rY-5r5" id="peM-Kk-tiW"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
@@ -22,16 +23,28 @@
             <items>
                 <menuItem title="Select..." id="Vc9-cA-dcf">
                     <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="selectFileClicked:" target="Vwc-8O-IKQ" id="kAj-di-gNG"/>
+                    </connections>
                 </menuItem>
                 <menuItem title="Launch Script" id="lpM-8d-4Kl">
                     <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="launchScriptClicked:" target="Vwc-8O-IKQ" id="MSo-2X-lN4"/>
+                    </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="Qjc-bm-ne5"/>
                 <menuItem title="Open at Login" id="8ev-rY-5r5">
                     <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="openAtLoginClicked:" target="Vwc-8O-IKQ" id="vI8-2v-xwL"/>
+                    </connections>
                 </menuItem>
                 <menuItem title="Quit" id="KEs-8b-Oj6">
                     <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="quitClicked:" target="Vwc-8O-IKQ" id="74T-2t-euC"/>
+                    </connections>
                 </menuItem>
             </items>
             <point key="canvasLocation" x="84" y="-8"/>
