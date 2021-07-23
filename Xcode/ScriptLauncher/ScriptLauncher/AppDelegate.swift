@@ -12,9 +12,15 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 
 
-
+    @IBOutlet weak var menu: NSMenu!
+    let statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        let icon = NSImage(named: "MenubarIcon")
+        icon?.isTemplate = true
+        statusBar.button?.image = icon
+        statusBar.menu = menu
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
