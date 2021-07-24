@@ -13,7 +13,7 @@ import ServiceManagement
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var menu: NSMenu!
-    @IBOutlet weak var launchScript: NSMenuItem!
+    @IBOutlet weak var launchScript: LaunchScript!
     @IBOutlet weak var openAtLogin: NSMenuItem!
     
     let statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -32,6 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBar.menu = menu
         
         launchScript.isEnabled = fileEditor.fileDirectory == nil ? false : true
+        launchScriptClicked("")
         
         // 현재 실행중인 파일 중 helperBundleName이 있다면 true 반환
         foundHelper = NSWorkspace.shared.runningApplications.contains { $0.bundleIdentifier == helperBundleName }
@@ -62,21 +63,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     // path 뒤의 선택된 파일명 + "/" 삭제
                     while path.removeLast() != "/" { }
                     
-                    fileEditor.fileDirectory = path
-                    launchScript.isEnabled = true
+                    launchScript.update(&fileEditor, path: path)
                     let script: String = self.makeScript(commands: "cd \(path)", "node \(url.lastPathComponent)")
                     if let data = script.data(using: .utf8) {
                         fileEditor.createFile(contents: data)
                     }
                 }
                 else {
-                    fileEditor.fileDirectory = nil
-                    launchScript.isEnabled = false
+                    launchScript.update(&fileEditor)
                 }
             }
             else {                                              // Cancel
-                fileEditor.fileDirectory = nil
-                launchScript.isEnabled = false
+                launchScript.update(&fileEditor)
             }
         }
     }
@@ -85,14 +83,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let path = fileEditor.path else {
             return
         }
-        
+
         if NSWorkspace.shared.openFile(path, withApplication: "Terminal") {
             print("File open succeed: \(path)")
         }
         else {
             print("File open failed: \(path)")
-            fileEditor.fileDirectory = nil
-            launchScript.isEnabled = false
+            launchScript.update(&fileEditor)
         }
     }
     
@@ -104,7 +101,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func quitClicked(_ sender: Any) {
         NSApplication.shared.terminate(self)
     }
-    
     
     func makeScript(commands: String ...) -> String {
         return commands.reduce("") { $0 + $1 + "\n" }

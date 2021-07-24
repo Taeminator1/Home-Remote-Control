@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3400506426AC44AD00F300E1 /* LaunchScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3400506326AC44AD00F300E1 /* LaunchScript.swift */; };
 		3421DEC326A8670200CB4F5F /* FileEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421DEC226A8670200CB4F5F /* FileEditor.swift */; };
 		345D328626AA3CB500677819 /* Menu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 345D328526AA3CB500677819 /* Menu.xib */; };
 		34D1BE6726AAA32B0041A601 /* LaunchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1BE6626AAA32B0041A601 /* LaunchAppDelegate.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3400506326AC44AD00F300E1 /* LaunchScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScript.swift; sourceTree = "<group>"; };
 		3421DEC226A8670200CB4F5F /* FileEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEditor.swift; sourceTree = "<group>"; };
 		345D328526AA3CB500677819 /* Menu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Menu.xib; sourceTree = "<group>"; };
 		34D1BE6426AAA32B0041A601 /* ScriptLauncher Launch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ScriptLauncher Launch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +101,7 @@
 			children = (
 				34F815DF26A72F4E0006A03D /* AppDelegate.swift */,
 				3421DEC226A8670200CB4F5F /* FileEditor.swift */,
+				3400506326AC44AD00F300E1 /* LaunchScript.swift */,
 				34F815E326A72F4F0006A03D /* Assets.xcassets */,
 				345D328526AA3CB500677819 /* Menu.xib */,
 				34F815E826A72F4F0006A03D /* Info.plist */,
@@ -217,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34F815E026A72F4E0006A03D /* AppDelegate.swift in Sources */,
+				3400506426AC44AD00F300E1 /* LaunchScript.swift in Sources */,
 				3421DEC326A8670200CB4F5F /* FileEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

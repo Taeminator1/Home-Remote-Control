@@ -14,7 +14,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Vwc-8O-IKQ" customClass="AppDelegate" customModule="ScriptLauncher" customModuleProvider="target">
             <connections>
-                <outlet property="launchScript" destination="lpM-8d-4Kl" id="Sze-z2-2TL"/>
+                <outlet property="launchScript" destination="lpM-8d-4Kl" id="FzH-8S-3Xy"/>
                 <outlet property="menu" destination="f6m-rh-PLB" id="rNp-bx-b4M"/>
                 <outlet property="openAtLogin" destination="8ev-rY-5r5" id="peM-Kk-tiW"/>
             </connections>
@@ -28,10 +28,10 @@
                         <action selector="selectFileClicked:" target="Vwc-8O-IKQ" id="kAj-di-gNG"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Launch Script" id="lpM-8d-4Kl">
+                <menuItem title="Launch Script" id="lpM-8d-4Kl" customClass="LaunchScript" customModule="ScriptLauncher" customModuleProvider="target">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
-                        <action selector="launchScriptClicked:" target="Vwc-8O-IKQ" id="MSo-2X-lN4"/>
+                        <action selector="launchScriptClicked:" target="Vwc-8O-IKQ" id="m7i-L9-Nvz"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="Qjc-bm-ne5"/>
