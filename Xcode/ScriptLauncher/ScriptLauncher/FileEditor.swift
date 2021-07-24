@@ -9,22 +9,31 @@
 import Foundation
 
 struct FileEditor {
+    
     var fileName: String            // 파일 이름
     var fileExtension: String       // 파일 확장자
-    var filePath: String?           // 파일 경로
     
-    var path: String? {
-        guard let filePath = self.filePath else {
+    var fileDirectory: String? {    // 파일 디렉터리
+        get {
+            UserDefaults.standard.string(forKey: "path")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "path")
+        }
+    }
+    
+    var path: String? {             // 전체 경로
+        guard let fileDirectory = self.fileDirectory else {
             return nil
         }
-        return "\(filePath)/\(fileName).\(fileExtension)"
+        
+        return "\(fileDirectory)/\(fileName).\(fileExtension)"
     }
     
     func createFile(contents: Data?) {
         // chmod 744 [fileName]
         // -rwxr--r--
         let attributes: [FileAttributeKey: Any]? = [FileAttributeKey.posixPermissions: 0o744]
-        
         guard let path = self.path else {
             return
         }
