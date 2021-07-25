@@ -13,7 +13,7 @@
 		34D1BE6726AAA32B0041A601 /* LaunchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1BE6626AAA32B0041A601 /* LaunchAppDelegate.swift */; };
 		34D1BE6B26AAA32C0041A601 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D1BE6A26AAA32C0041A601 /* Assets.xcassets */; };
 		34D1BE6E26AAA32C0041A601 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34D1BE6C26AAA32C0041A601 /* Main.storyboard */; };
-		34D1BE8326AAA5660041A601 /* ScriptLauncher Launch.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34D1BE6426AAA32B0041A601 /* ScriptLauncher Launch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		34D1BE8326AAA5660041A601 /* Script Launcher Launch.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34D1BE6426AAA32B0041A601 /* Script Launcher Launch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34F815E026A72F4E0006A03D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F815DF26A72F4E0006A03D /* AppDelegate.swift */; };
 		34F815E426A72F4F0006A03D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34F815E326A72F4F0006A03D /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -25,7 +25,7 @@
 			dstPath = Contents/Library/LoginItems;
 			dstSubfolderSpec = 1;
 			files = (
-				34D1BE8326AAA5660041A601 /* ScriptLauncher Launch.app in CopyFiles */,
+				34D1BE8326AAA5660041A601 /* Script Launcher Launch.app in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,17 +35,17 @@
 		3400506326AC44AD00F300E1 /* LaunchScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScript.swift; sourceTree = "<group>"; };
 		3421DEC226A8670200CB4F5F /* FileEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileEditor.swift; sourceTree = "<group>"; };
 		345D328526AA3CB500677819 /* Menu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Menu.xib; sourceTree = "<group>"; };
-		34D1BE6426AAA32B0041A601 /* ScriptLauncher Launch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ScriptLauncher Launch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D1BE6426AAA32B0041A601 /* Script Launcher Launch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Script Launcher Launch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D1BE6626AAA32B0041A601 /* LaunchAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAppDelegate.swift; sourceTree = "<group>"; };
 		34D1BE6A26AAA32C0041A601 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34D1BE6D26AAA32C0041A601 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		34D1BE6F26AAA32C0041A601 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		34D1BE7026AAA32C0041A601 /* ScriptLauncher_Launch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScriptLauncher_Launch.entitlements; sourceTree = "<group>"; };
-		34F815DC26A72F4E0006A03D /* ScriptLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScriptLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D1BE7026AAA32C0041A601 /* Script_Launcher_Launch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Script_Launcher_Launch.entitlements; sourceTree = "<group>"; };
+		34F815DC26A72F4E0006A03D /* Script Launcher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Script Launcher.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34F815DF26A72F4E0006A03D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		34F815E326A72F4F0006A03D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34F815E826A72F4F0006A03D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		34F815E926A72F4F0006A03D /* ScriptLauncher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScriptLauncher.entitlements; sourceTree = "<group>"; };
+		34F815E926A72F4F0006A03D /* Script_Launcher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Script_Launcher.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,23 +66,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		34D1BE6526AAA32B0041A601 /* ScriptLauncher Launch */ = {
+		34D1BE6526AAA32B0041A601 /* Script Launcher Launch */ = {
 			isa = PBXGroup;
 			children = (
 				34D1BE6626AAA32B0041A601 /* LaunchAppDelegate.swift */,
 				34D1BE6A26AAA32C0041A601 /* Assets.xcassets */,
 				34D1BE6C26AAA32C0041A601 /* Main.storyboard */,
 				34D1BE6F26AAA32C0041A601 /* Info.plist */,
-				34D1BE7026AAA32C0041A601 /* ScriptLauncher_Launch.entitlements */,
+				34D1BE7026AAA32C0041A601 /* Script_Launcher_Launch.entitlements */,
 			);
-			path = "ScriptLauncher Launch";
+			path = "Script Launcher Launch";
 			sourceTree = "<group>";
 		};
 		34F815D326A72F4E0006A03D = {
 			isa = PBXGroup;
 			children = (
-				34F815DE26A72F4E0006A03D /* ScriptLauncher */,
-				34D1BE6526AAA32B0041A601 /* ScriptLauncher Launch */,
+				34F815DE26A72F4E0006A03D /* Script Launcher */,
+				34D1BE6526AAA32B0041A601 /* Script Launcher Launch */,
 				34F815DD26A72F4E0006A03D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,13 +90,13 @@
 		34F815DD26A72F4E0006A03D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				34F815DC26A72F4E0006A03D /* ScriptLauncher.app */,
-				34D1BE6426AAA32B0041A601 /* ScriptLauncher Launch.app */,
+				34F815DC26A72F4E0006A03D /* Script Launcher.app */,
+				34D1BE6426AAA32B0041A601 /* Script Launcher Launch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		34F815DE26A72F4E0006A03D /* ScriptLauncher */ = {
+		34F815DE26A72F4E0006A03D /* Script Launcher */ = {
 			isa = PBXGroup;
 			children = (
 				34F815DF26A72F4E0006A03D /* AppDelegate.swift */,
@@ -105,17 +105,17 @@
 				34F815E326A72F4F0006A03D /* Assets.xcassets */,
 				345D328526AA3CB500677819 /* Menu.xib */,
 				34F815E826A72F4F0006A03D /* Info.plist */,
-				34F815E926A72F4F0006A03D /* ScriptLauncher.entitlements */,
+				34F815E926A72F4F0006A03D /* Script_Launcher.entitlements */,
 			);
-			path = ScriptLauncher;
+			path = "Script Launcher";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		34D1BE6326AAA32B0041A601 /* ScriptLauncher Launch */ = {
+		34D1BE6326AAA32B0041A601 /* Script Launcher Launch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 34D1BE7326AAA32C0041A601 /* Build configuration list for PBXNativeTarget "ScriptLauncher Launch" */;
+			buildConfigurationList = 34D1BE7326AAA32C0041A601 /* Build configuration list for PBXNativeTarget "Script Launcher Launch" */;
 			buildPhases = (
 				34D1BE6026AAA32B0041A601 /* Sources */,
 				34D1BE6126AAA32B0041A601 /* Frameworks */,
@@ -125,14 +125,14 @@
 			);
 			dependencies = (
 			);
-			name = "ScriptLauncher Launch";
+			name = "Script Launcher Launch";
 			productName = "ScriptLauncher Launch";
-			productReference = 34D1BE6426AAA32B0041A601 /* ScriptLauncher Launch.app */;
+			productReference = 34D1BE6426AAA32B0041A601 /* Script Launcher Launch.app */;
 			productType = "com.apple.product-type.application";
 		};
-		34F815DB26A72F4E0006A03D /* ScriptLauncher */ = {
+		34F815DB26A72F4E0006A03D /* Script Launcher */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 34F815EC26A72F4F0006A03D /* Build configuration list for PBXNativeTarget "ScriptLauncher" */;
+			buildConfigurationList = 34F815EC26A72F4F0006A03D /* Build configuration list for PBXNativeTarget "Script Launcher" */;
 			buildPhases = (
 				34F815D826A72F4E0006A03D /* Sources */,
 				34F815D926A72F4E0006A03D /* Frameworks */,
@@ -143,9 +143,9 @@
 			);
 			dependencies = (
 			);
-			name = ScriptLauncher;
+			name = "Script Launcher";
 			productName = ScriptLauncher;
-			productReference = 34F815DC26A72F4E0006A03D /* ScriptLauncher.app */;
+			productReference = 34F815DC26A72F4E0006A03D /* Script Launcher.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -166,7 +166,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 34F815D726A72F4E0006A03D /* Build configuration list for PBXProject "ScriptLauncher" */;
+			buildConfigurationList = 34F815D726A72F4E0006A03D /* Build configuration list for PBXProject "Script Launcher" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -179,8 +179,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				34F815DB26A72F4E0006A03D /* ScriptLauncher */,
-				34D1BE6326AAA32B0041A601 /* ScriptLauncher Launch */,
+				34F815DB26A72F4E0006A03D /* Script Launcher */,
+				34D1BE6326AAA32B0041A601 /* Script Launcher Launch */,
 			);
 		};
 /* End PBXProject section */
@@ -244,21 +244,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "ScriptLauncher Launch/ScriptLauncher_Launch.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Script Launcher Launch/Script_Launcher_Launch.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = LGU69RG34G;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = "ScriptLauncher Launch/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Script Launcher Launch/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Taeminator.ScriptLauncher-Launch";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Taeminator.Script-Launcher-Launch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -267,21 +267,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "ScriptLauncher Launch/ScriptLauncher_Launch.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Script Launcher Launch/Script_Launcher_Launch.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = LGU69RG34G;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = "ScriptLauncher Launch/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Script Launcher Launch/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Taeminator.ScriptLauncher-Launch";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Taeminator.Script-Launcher-Launch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -406,16 +406,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ScriptLauncher/ScriptLauncher.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Script Launcher/Script_Launcher.entitlements";
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = ScriptLauncher/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Script Launcher/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Taeminator.ScriptLauncher;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Taeminator.Script-Launcher";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
@@ -425,16 +425,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ScriptLauncher/ScriptLauncher.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Script Launcher/Script_Launcher.entitlements";
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = ScriptLauncher/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Script Launcher/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Taeminator.ScriptLauncher;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Taeminator.Script-Launcher";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
@@ -443,7 +443,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		34D1BE7326AAA32C0041A601 /* Build configuration list for PBXNativeTarget "ScriptLauncher Launch" */ = {
+		34D1BE7326AAA32C0041A601 /* Build configuration list for PBXNativeTarget "Script Launcher Launch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				34D1BE7126AAA32C0041A601 /* Debug */,
@@ -452,7 +452,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		34F815D726A72F4E0006A03D /* Build configuration list for PBXProject "ScriptLauncher" */ = {
+		34F815D726A72F4E0006A03D /* Build configuration list for PBXProject "Script Launcher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				34F815EA26A72F4F0006A03D /* Debug */,
@@ -461,7 +461,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		34F815EC26A72F4F0006A03D /* Build configuration list for PBXNativeTarget "ScriptLauncher" */ = {
+		34F815EC26A72F4F0006A03D /* Build configuration list for PBXNativeTarget "Script Launcher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				34F815ED26A72F4F0006A03D /* Debug */,

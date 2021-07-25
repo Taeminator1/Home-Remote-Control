@@ -19,7 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     // for Opening at Login
-    let helperBundleName = "com.Taeminator.ScriptLauncher-Launch"
+    let helperBundleName = "com.Taeminator.Script-Launcher-Launch"
     var foundHelper: Bool = true
     
     var fileEditor = FileEditor(fileName: "script", fileExtension: "command")

@@ -8,7 +8,7 @@
 
 import Cocoa
 
-@main
+@NSApplicationMain
 class LaunchAppDelegate: NSObject, NSApplicationDelegate {
 
     
@@ -18,7 +18,7 @@ class LaunchAppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to initialize your application
         let runningApps = NSWorkspace.shared.runningApplications
         let isRunning = runningApps.contains {
-            $0.bundleIdentifier == "com.Taeminator.ScriptLauncher"
+            $0.bundleIdentifier == "com.Taeminator.Script-Launcher"
         }
             
         if !isRunning {
