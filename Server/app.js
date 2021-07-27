@@ -88,46 +88,57 @@ function loadHTML(readStr) {
 }
 
 var app = http.createServer(function(request,response){
-    var _url = request.url;
-    var pathname = url.parse(_url, true).pathname;
-    if(pathname === '/'){           // URL에 주소 입력시 동작
-        fs.readFile('data.txt', 'utf8', function(err, description){
-            var readStr = description.split("/");
-            console.log("Success reading file")
-            response.writeHead(200);
-            response.end(loadHTML(readStr));
-      });
-    } else if(pathname === '/create'){      // submit 버튼 누를 시 동작
-      var body = '';
-      request.on('data', function(data){
-        body = body + data;
-      });
-      request.on('end', function(){
-        var post = qs.parse(body);
-        var title = "data.txt";
-        var description = "";
-        if(post.test1 == "on") {
-          description = "true/";
-        } else {
-          description = "false/";
-        }
-        if(post.test2 == "on") {
-          description = description + "true";
-        } else {
-          description = description + "false";
-        }
+  var baseURL = 'http://' + request.headers.host + '/';
+  var pathname = new URL(request.url, baseURL).pathname
+  var title = "data.txt";
 
-        fs.writeFile(`${title}`, description, 'utf8', function(err){
-          response.writeHead(302, {Location: `/?id=${title}`});
-          response.end();
-          console.log("Success writing file")
-        });
+  if(pathname === '/'){           // URL에 주소 입력시 동작
+    if (!fs.existsSync('data.txt')) {     // data.txt 파일이 존재하지 않으면 파일 생성
+      fs.writeFile(`${title}`, 'false/false/', 'utf8', function(err){
+        response.writeHead(302, {Location: `/?id=${title}`});
+        response.end();
       });
-    } else {
-      response.writeHead(404);
-      response.end('Not found');
     }
+    else {                                // data.txt 파일이 존재하면 파일 읽기
+      fs.readFile('data.txt', 'utf8', function(err, description){
+        var readStr = description.split("/");
+        console.log("Success reading file")
+        response.writeHead(200);
+        response.end(loadHTML(readStr));
+      });
+    }
+  } else if(pathname === '/create'){      // submit 버튼 누를 시 동작
+    var body = '';
+    request.on('data', function(data){
+      body = body + data;
+    });
+    request.on('end', function(){
+      var post = qs.parse(body);
+      var description = "";
+
+      if(post.test1 == "on") {
+        description = description + "true/";
+      } else {
+        description = description + "false/";
+      }
+      if(post.test2 == "on") {
+        description = description + "true/";
+      } else {
+        description = description + "false/";
+      }
+      
+      fs.writeFile(`${title}`, description, 'utf8', function(err){
+        response.writeHead(302, {Location: `/?id=${title}`});
+        response.end();
+        console.log("Success writing file")
+      });
+    });
+  } else {
+    response.writeHead(404);
+    response.end('Not found');
+  }
 });
-app.listen(inPort, function() {       // 내부 포트 번호: 80, 외부 포트 번호는 웹브라우저의 주소창에 입력
+
+app.listen(inPort, function() {
   console.log("HRC node.js is running on port %d", inPort);
 });
