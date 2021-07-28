@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var isConnected: Bool = false
-    @State var buttonStates: [Bool] = [false, false]
+    @Binding var isConnected: Bool
+    @Binding var buttonStates: [Bool]
     
     @State var refresh = Refresh(started: false, released: false)
     
@@ -44,9 +44,6 @@ struct ContentView: View {
             .navigationTitle("HRC")
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear() {
-            fetchData(url: HRCApp.url)
-        }
     }
     
     func fetchData(url: String) -> Void {
@@ -63,9 +60,8 @@ struct ContentView: View {
             if let htmlFromURL = String(data: data, encoding: .utf8) {
                 for i in 0 ... htmlFromURL.count {
                     if htmlFromURL[i ..< (i + 6)] == "\"label" {
-                        
                         buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
-                    
+                        
                         index += 1
                         if index == buttonStates.count { break }
                     }
@@ -78,6 +74,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(isConnected: .constant(true), buttonStates: .constant([false, true]))
     }
 }
