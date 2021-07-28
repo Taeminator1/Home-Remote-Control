@@ -43,7 +43,7 @@ struct HRCApp: App {
             isConnected = true
             if let htmlFromURL = String(data: data, encoding: .utf8) {
                 for i in 0 ... htmlFromURL.count {
-                    if htmlFromURL[i ..< (i + 6)] == "\"label" {
+                    if htmlFromURL[i ..< (i + 6)] == "\'label" {
                         
                         buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
                     

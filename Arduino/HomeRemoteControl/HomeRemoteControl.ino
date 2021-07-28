@@ -67,7 +67,7 @@ void loop() {
           
           int index = 0;
           for (int i = 0; i < payload.length() - 6; i++) {
-            if (payload.substring(i, i + 6) == "\"label") {           // find string starting with "\"label" in HTML
+            if (payload.substring(i, i + 6) == "'label") {                      // find string starting with "'label" in HTML
                   
               String buff = "false";
               buff = payload.substring(i + 10, i + 15);

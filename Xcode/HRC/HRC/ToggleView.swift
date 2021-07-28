@@ -4,7 +4,6 @@
 //
 //  Created by 윤태민 on 3/24/21.
 //
-
 import SwiftUI
 import WebKit
 
@@ -27,7 +26,7 @@ struct ToggleView: View {
     }
     
     func javaScriptFunction(index: Int) -> Void {
-        HRCApp.wkWebView.evaluateJavaScript("btn\(index + 1)ButtonClicked();", completionHandler: { (result, error) in
+        HRCApp.wkWebView.evaluateJavaScript("buttonClicked('btn\(index + 1)');", completionHandler: { (result, error) in
             if let anError = error {
                 print("evaluateJavaScript infoUpdate Error \(anError.localizedDescription)")
             }
