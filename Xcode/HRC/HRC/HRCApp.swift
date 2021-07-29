@@ -11,48 +11,17 @@ import WebKit
 @main
 struct HRCApp: App {
     static let url: String = PersonalInfo.strURL
-    
+
     static let wkWebView = WKWebView()
     static let request: URLRequest = URLRequest.init(url: NSURL.init(string: HRCApp.url)! as URL)
-    
-    @State var isConnected: Bool = false
-    @State var buttonStates: [Bool] = [false, false]
-    
+
     var body: some Scene {
         WindowGroup {
-            ContentView(isConnected: $isConnected, buttonStates: $buttonStates)
+            ContentView()
                 .onAppear() {
-                    fetchData(url: HRCApp.url)
                     HRCApp.wkWebView.load(HRCApp.request)
-                    
-                    sleep(1)        // loading 시간 고려해 지연 발생시킴
+                    sleep(2)        // 앱 시작시에 Toggle 조작에 대해 A JavaScript exception occurred 유도하기 위해 지연 발생시킴
                 }
         }
-    }
-    
-    func fetchData(url: String) -> Void {
-        var index: Int = 0
-        
-        let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-            guard let data = data else {
-                print(String(describing: error))
-                isConnected = false
-                return
-            }
-            
-            isConnected = true
-            if let htmlFromURL = String(data: data, encoding: .utf8) {
-                for i in 0 ... htmlFromURL.count {
-                    if htmlFromURL[i ..< (i + 6)] == "\'label" {
-                        
-                        buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
-                    
-                        index += 1
-                        if index == buttonStates.count { break }
-                    }
-                }
-            }
-        }
-        task.resume()
     }
 }
