@@ -1,17 +1,21 @@
 #include "Toggle.h"
 
 Toggle::Toggle() {
-  externalState = false;
-  internalState = false;
+  eState = false;
+  iState = false;
 }
 
-void Toggle::setExternalState(bool state) {
-  externalState = state;
+void Toggle::setEState(bool state) {
+  eState = state;
+}
+
+void Toggle::syncIStateWithEState() {
+  iState = eState;
 }
 
 bool Toggle::isTurnedOn() {
-  if (externalState == true && internalState == false) {
-    internalState = true;
+  if (eState == true && iState == false) {
+    iState = true;
     return true;
   }
   else {
@@ -20,8 +24,8 @@ bool Toggle::isTurnedOn() {
 }
 
 bool Toggle::isTurnedOff() {
-  if (externalState == false && internalState == true) {
-    internalState = false;
+  if (eState == false && iState == true) {
+    iState = false;
     return true;
   }
   else {

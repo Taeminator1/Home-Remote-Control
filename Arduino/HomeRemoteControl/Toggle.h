@@ -5,11 +5,12 @@
 
 class Toggle {
 private:
-  bool externalState;         // store data in NodeMCU
-  bool internalState;         // get data from web page
+  bool eState;                // Extenernal State:  get data from web page
+  bool iState;                // Internal State:    store data in NodeMCU
 public:
   Toggle();
-  void setExternalState(bool state);
+  void setEState(bool state);
+  void syncIStateWithEState();
   bool isTurnedOn();
   bool isTurnedOff();
 };
