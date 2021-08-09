@@ -13,6 +13,8 @@ struct ContentView: View {
     
     @State var refresh = Refresh(started: false, released: false)
     
+    @State var record: String = UserDefaults.standard.string(forKey: "record") ?? ""
+    
     let buttonNames: [String] = ["Close the window", "Turn on the airconditioner"]
     
     var body: some View {
@@ -39,6 +41,8 @@ struct ContentView: View {
                     }
                     return Color.clear
                 })
+                
+                testSection
             }
             .listStyle(InsetGroupedListStyle())
             .navigationTitle("HRC")
@@ -72,6 +76,29 @@ struct ContentView: View {
             }
         }
         task.resume()
+    }
+}
+
+// MARK:- Test Section
+extension ContentView {
+    var testSection: some View {
+        Section(header: Text("Test")) {
+            Text("\(UserDefaults.standard.integer(forKey: "attemptsNumber"))")
+                .onAppear() {
+                    let tmp: Int = UserDefaults.standard.integer(forKey: "attemptsNumber")
+                    UserDefaults.standard.set(tmp + 1, forKey: "attemptsNumber")
+                }
+            HStack {
+                TextEditor(text: $record)
+                    .frame(height: 100)
+                Button(action: {
+                    UserDefaults.standard.set(record, forKey: "record")
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }) {
+                    Text("Return")
+                }
+            }
+        }
     }
 }
 
