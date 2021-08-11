@@ -1,9 +1,21 @@
+//
+//  app.js
+//
+//  Create by Taemin Yun on 7/26 /20
+//  Copyright © 2020 Taemin Yun. All rights reserved.
+//
+
+//  Operate server in specific port of router.
+//  It includes HTML.
+//  The file is able to excuted by typing "node app.js" or running "Script Launcher" app.
+//  Before run, you should assign internal port number to inPort variable.
+
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 
-const inPort = 0;            // 내부 포트 번호
+const inPort = 0;            // Internal Port Number
  
 function loadHTML(readStr) {
   return `
@@ -30,7 +42,7 @@ function loadHTML(readStr) {
       </form>
 
       <script>
-        window.onload = function() {                          // 웹페이지가 로드될 때 실행
+        window.onload = function() {                          // When page is loaded,
           document.getElementById('btn1').checked = ${readStr[0]};
           document.getElementById('btn2').checked = ${readStr[1]};
 
@@ -45,7 +57,7 @@ function loadHTML(readStr) {
         function setEventListener(btn, btnId, labelId) {
           btn.addEventListener('click', (event) => {    
             setHTMLState(labelId, btnId)
-            saveHTMLState('save')                             // checkbox 누를 때마다 상태 save
+            saveHTMLState('save')                             // Whenever checkbox is clicked, state is saved.
           });
         }
 
@@ -57,7 +69,7 @@ function loadHTML(readStr) {
           document.getElementById(id).form.submit();
         }
        
-        function buttonClicked(btn) {     // iOS 앱에서 접근 가능하도록 함수 정의
+        function buttonClicked(btn) {                         // Function to use in iOS App
           document.getElementById(btn).click();
         }
       </script>
@@ -69,16 +81,16 @@ function loadHTML(readStr) {
 var app = http.createServer(function(request,response){
   var baseURL = 'http://' + request.headers.host + '/';
   var pathname = new URL(request.url, baseURL).pathname
-  var title = 'data.txt';
+  var title = 'data.txt';         // Store states of buttons.
 
-  if(pathname === '/'){           // URL에 주소 입력시 동작
-    if (!fs.existsSync(`${title}`)) {     // data.txt 파일이 존재하지 않으면 파일 생성
+  if(pathname === '/'){           // When write address in browser,
+    if (!fs.existsSync(`${title}`)) {     // If data.txt file doesn't exist, create the file.
       fs.writeFile(`${title}`, 'false/false/', 'utf8', function(err){
         response.writeHead(302, {Location: `/?id=${title}`});
         response.end();
       });
     }
-    else {                                // data.txt 파일이 존재하면 파일 읽기
+    else {                                // If data.txt file exists, read the file.
       fs.readFile(`${title}`, 'utf8', function(err, description){
         var readStr = description.split('/');
         console.log('Success reading file')
@@ -87,7 +99,7 @@ var app = http.createServer(function(request,response){
       });
     }
   } 
-  else if(pathname === '/create'){      // submit 버튼 누를 시 동작
+  else if(pathname === '/create'){        // When submit button is pushed,
     var body = '';
     request.on('data', function(data){
       body = body + data;

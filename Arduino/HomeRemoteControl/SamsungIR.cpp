@@ -1,3 +1,13 @@
+//
+//  SamsungIR.cpp
+//  HomeRemoteControl
+//
+//  Create by Taemin Yun on 7/22/21
+//  Copyright © 2020 Taemin Yun. All rights reserved.
+//
+
+//  Source file for IR Signal to control the Samsung airconditioner
+
 #include "SamsungIR.h"
 
 // Mesg Desc.: Power: Off, Mode: 0 (Auto), Temp: 25C, Fan: 6 (Auto), Swing: Off, Beep: Off, Clean: Off, Quiet: Off, Powerful: Off, Breeze: Off, Light: On, Ion: Off

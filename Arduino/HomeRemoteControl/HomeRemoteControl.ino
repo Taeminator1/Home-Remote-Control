@@ -1,10 +1,24 @@
-#define BUAD_RATE               115200    // b/s(bits per second)
+//
+//  HomeRemoteControl.ino
+//  HomeRemoteControl
+//
+//  Create by Taemin Yun on 9/18/20
+//  Copyright © 2020 Taemin Yun. All rights reserved.
+//
+
+//  Arduino sketch file to control NodeMCU with ESP8266:
+//  - Wi-Fi Connection
+//  - IR Transmitter
+//  - Stepper(Linear Motor)
+// Before the test, you should set the variables about network Information in PersonalInfo.h
+
+#define BUAD_RATE               115200    // [b/s(bits per second)]
 #define BUTTONS_COUNT           2         // 0: for window, 1: for airconditioner
 #define SWITCHS_COUNT           2         // 0: end of the actuator, 1: next to the motor
-#define LOOP_DELAY              1000      // ms
+#define LOOP_DELAY              1000      // [ms]
 #define STEPS_PER_REVOLUTION    200
 #define STEP_SPEED              200
-#define STEP_DELAY              1         // ms
+#define STEP_DELAY              1         // [ms]
 
 #include <Arduino.h>
 #include <ESP8266WiFiMulti.h>
@@ -15,11 +29,12 @@
 #include "SamsungIR.h"
 #include "Toggle.h"
 
-// assign GPIO pins
+// ----- Assign GPIO pins -----
 const int driverPins[4] = {14, 12, 13, 15};
 const int irPin = 10;
 const int switchPins[SWITCHS_COUNT] = {5, 4};
 
+// ----- Create Instances -----
 ESP8266WiFiMulti WiFiMulti;
 Toggle toggles[BUTTONS_COUNT];
 
@@ -48,7 +63,7 @@ void setup() {
 
 void loop() {
   
-  if ((WiFiMulti.run() == WL_CONNECTED)) {    // check connection state
+  if ((WiFiMulti.run() == WL_CONNECTED)) {    // Check connection state.
     WiFiClient client;
     HTTPClient http;
     
@@ -64,11 +79,10 @@ void loop() {
         // file found at server
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
           const String payload = http.getString();
-          const String target = "'label";                     // find String starting with "'label"
-                                                              // in HTML(<label id = 'labelx'> xxxxx </label>)
-          
+          const String target = "'label";                     // Find String starting with "'label"
+                                                              // in HTML(<label id = 'labelx'> xxxxx </label>).
           int toggleIndex = 0;
-          // get states of buttons in HTML
+          // Get states of buttons in HTML.
           for (int i = 0; i < payload.length() - target.length(); i++) {
             if (payload.substring(i, i + target.length()) == target) {
               i += (target.length() + 4);

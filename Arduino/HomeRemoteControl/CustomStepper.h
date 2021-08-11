@@ -1,3 +1,13 @@
+//
+//  CustomStepper.h
+//  HomeRemoteControl
+//
+//  Create by Taemin Yun on 7/22/21
+//  Copyright © 2020 Taemin Yun. All rights reserved.
+//
+
+//  Header file to control Stepper
+
 #ifndef CUSTOM_STEPPER_H
 #define CUSTOM_STEPPER_H
 
@@ -12,7 +22,9 @@ public:
     this->stepDelay = stepDelay;
   };
   void rotate(int stepVelocity);
+  // Rotate until changing the state of pin
   void rotateWithSwitch(int switchPin, int stepVelocity);
+  // Rotate repeatedly in specific times
   void rotateRepeatedly(int repeatNumber, int stepVelocity);
 };
 
