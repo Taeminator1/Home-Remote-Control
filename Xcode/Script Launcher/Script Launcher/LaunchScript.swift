@@ -6,6 +6,9 @@
 //  Copyright © 2021 Taemin Yun. All rights reserved.
 //
 
+//  Class for methods related with launching script:
+//  - Update path
+
 import Cocoa
 
 class LaunchScript: NSMenuItem {

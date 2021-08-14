@@ -6,14 +6,16 @@
 //  Copyright © 2021 Taemin Yun. All rights reserved.
 //
 
+//  Edit File with FileManager.
+
 import Foundation
 
 struct FileEditor {
     
-    var fileName: String            // 파일 이름
-    var fileExtension: String       // 파일 확장자
+    var fileName: String
+    var fileExtension: String       // txt, js, ...
     
-    var fileDirectory: String? {    // 파일 디렉터리
+    var fileDirectory: String? {
         get {
             UserDefaults.standard.string(forKey: "path")
         }
@@ -22,17 +24,18 @@ struct FileEditor {
         }
     }
     
-    var path: String? {             // 전체 경로
+    var path: String? {
         guard let fileDirectory = self.fileDirectory else {
             return nil
         }
         
+        // /Users/userName/.../fileName.fileExtension
         return "\(fileDirectory)/\(fileName).\(fileExtension)"
     }
     
     func createFile(contents: Data?) {
-        // chmod 744 [fileName]
-        // -rwxr--r--
+        // chmod 744 [fileName]         // Set the attributes in Terminal.
+        // -rwxr--r--                   // Result
         let attributes: [FileAttributeKey: Any]? = [FileAttributeKey.posixPermissions: 0o744]
         guard let path = self.path else {
             return

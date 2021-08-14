@@ -6,6 +6,10 @@
 //  Copyright © 2021 Taemin Yun. All rights reserved.
 //
 
+//  Initialize for the Application:
+//  - Status item for menu
+//  - Open at Login
+
 import Cocoa
 import ServiceManagement
 
@@ -18,7 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     let statusBar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
-    // for Opening at Login
+    // For Opening at Login
     let helperBundleName = "com.Taeminator.Script-Launcher-Launch"
     var foundHelper: Bool = true
     
@@ -26,15 +30,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        let icon = NSImage(named: "MenubarIcon")
-        icon?.isTemplate = true
-        statusBar.button?.image = icon
+        
+        // MARK:- Set status item for menu.
+        if let button = statusBar.button, let icon = NSImage(named: "MenubarIcon") {
+            icon.isTemplate = true
+            button.image = icon
+        }
         statusBar.menu = menu
         
+        // MARK:- If file has been loaded in App, excute the file.
         launchScript.isEnabled = fileEditor.fileDirectory == nil ? false : true
         launchScriptClicked("")
         
-        // 현재 실행중인 파일 중 helperBundleName이 있다면 true 반환
+        // MARK:- Set Open at Login.
         foundHelper = NSWorkspace.shared.runningApplications.contains { $0.bundleIdentifier == helperBundleName }
         openAtLogin.state = foundHelper ? .on : .off
     }
@@ -52,28 +60,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         openPanel.allowedFileTypes = ["js"]
         
         openPanel.begin { [self] (result) -> Void in
-            if result == NSApplication.ModalResponse.OK {       // Select a File
-                
-                if let url = openPanel.url {
-                    var path: String = "\(url)"
+            if result == NSApplication.ModalResponse.OK, let url = openPanel.url {       // Select a File.
+                var path: String = "\(url)"
 
-                    // path 앞의 문자열 "file://" 삭제
-                    path.removeSubrange(path.startIndex ..< path.index(path.startIndex, offsetBy: "file://".count))
-                    
-                    // path 뒤의 선택된 파일명 + "/" 삭제
-                    while path.removeLast() != "/" { }
-                    
-                    launchScript.update(&fileEditor, path: path)
-                    let script: String = self.makeScript(commands: "cd \(path)", "node \(url.lastPathComponent)")
-                    if let data = script.data(using: .utf8) {
-                        fileEditor.createFile(contents: data)
-                    }
-                }
-                else {
-                    launchScript.update(&fileEditor)
-                }
+                // "file:///Users/userName/.../someDir/fileName.js"
+                // → "/Users/userName/.../someDir/fileName.js"
+                path.removeSubrange(path.startIndex ..< path.index(path.startIndex, offsetBy: "file://".count))
+                
+                // "/Users/userName/.../someDir/fileName.js"
+                // → "/Users/userName/.../someDir"
+                while path.removeLast() != "/" { }
+                
+                launchScript.update(&fileEditor, path: path)
+                let script: String = self.makeScript(commands: "cd \(path)", "node \(url.lastPathComponent)")
+                fileEditor.createFile(contents: script.data(using: .utf8))
             }
-            else {                                              // Cancel
+            else {                                              // Cancel.
                 launchScript.update(&fileEditor)
             }
         }
