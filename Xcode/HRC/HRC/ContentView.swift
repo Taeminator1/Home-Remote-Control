@@ -5,6 +5,11 @@
 //  Created by 윤태민 on 3/24/21.
 //
 
+//  Initial view for inital excution of the Application:
+//  - Network Status
+//  - Controls
+//  - Test
+
 import SwiftUI
 
 struct ContentView: View {
@@ -20,29 +25,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("State")) {
-                    HStack {
-                        Text("Connection")
-                        Spacer()
-                        isConnected == true ? Text("OK") : Text("Fail")
-                    }
-                }
-                Section(header: Text("Control")) {
-                    ForEach(0 ..< buttonStates.count) {
-                        ToggleView(isChecked: $buttonStates[$0], index: $0, toggleName: buttonNames[$0])
-                            .disabled(!isConnected)
-                    }
-                }
-                .background(GeometryReader { reader -> Color in
-                    DispatchQueue.main.async {
-                        refresh.excute(reader: reader) {
-                            fetchData(url: HRCApp.url)
-                        }
-                    }
-                    return Color.clear
-                })
-                
-                testSection
+                networkStatus
+                controls
+                test
             }
             .listStyle(InsetGroupedListStyle())
             .navigationTitle("HRC")
@@ -53,6 +38,7 @@ struct ContentView: View {
         }
     }
 
+    // fetch data from sever
     func fetchData(url: String) -> Void {
         var index: Int = 0
         
@@ -64,7 +50,7 @@ struct ContentView: View {
             }
             
             isConnected = true
-            if let htmlFromURL = String(data: data, encoding: .utf8) {
+            if let htmlFromURL = String(data: data, encoding: .utf8) {      // Get String starting with "\'label" in HTML from server
                 for i in 0 ... htmlFromURL.count {
                     if htmlFromURL[i ..< (i + 6)] == "\'label" {
                         buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
@@ -81,7 +67,40 @@ struct ContentView: View {
 
 // MARK:- Test Section
 extension ContentView {
-    var testSection: some View {
+    var networkStatus: some View {
+        Section(header: Text("Network")) {
+            HStack {
+                Text("Status")
+                Spacer()
+                isConnected == true ? Text("Connected") : Text("Failed")
+            }
+        }
+    }
+}
+
+// MARK:- Controls
+extension ContentView {
+    var controls: some View {
+        Section(header: Text("Controls")) {
+            ForEach(0 ..< buttonStates.count) {
+                ToggleView(isChecked: $buttonStates[$0], index: $0, toggleName: buttonNames[$0])
+                    .disabled(!isConnected)
+            }
+        }
+        .background(GeometryReader { reader -> Color in
+            DispatchQueue.main.async {
+                refresh.excute(reader: reader) {
+                    fetchData(url: HRCApp.url)
+                }
+            }
+            return Color.clear
+        })
+    }
+}
+
+// MARK:- Network status
+extension ContentView {
+    var test: some View {
         Section(header: Text("Test")) {
             Text("\(UserDefaults.standard.integer(forKey: "attemptsNumber"))")
                 .onAppear() {
@@ -101,6 +120,8 @@ extension ContentView {
         }
     }
 }
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

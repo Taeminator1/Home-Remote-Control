@@ -5,12 +5,16 @@
 //  Created by 윤태민 on 6/3/21.
 //
 
+//  Initilze for the Application:
+//  - Request the server
+//  Before run, you should set the variables url for String in HRCApp struct.
+
 import SwiftUI
 import WebKit
 
 @main
 struct HRCApp: App {
-    static let url: String = PersonalInfo.strURL
+    static let url: String = PersonalInfo.strURL        // "http://..."
 
     static let wkWebView = WKWebView()
     static let request: URLRequest = URLRequest.init(url: NSURL.init(string: HRCApp.url)! as URL)

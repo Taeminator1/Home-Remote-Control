@@ -3,14 +3,13 @@
 //  HomeRemoteControl
 //
 //  Create by Taemin Yun on 9/18/20
-//  Copyright © 2020 Taemin Yun. All rights reserved.
 //
 
 //  Arduino sketch file to control NodeMCU with ESP8266:
 //  - Wi-Fi Connection
 //  - IR Transmitter
 //  - Stepper(Linear Motor)
-// Before the test, you should set the variables about network Information in PersonalInfo.h
+//  Before run, you should set the variables about network Information in PersonalInfo.h
 
 #define BUAD_RATE               115200    // [b/s(bits per second)]
 #define BUTTONS_COUNT           2         // 0: for window, 1: for airconditioner

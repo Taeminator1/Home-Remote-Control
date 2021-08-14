@@ -2,7 +2,6 @@
 //  app.js
 //
 //  Create by Taemin Yun on 7/26 /20
-//  Copyright © 2020 Taemin Yun. All rights reserved.
 //
 
 //  Operate server in specific port of router.
