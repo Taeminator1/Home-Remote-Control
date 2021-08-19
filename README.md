@@ -50,15 +50,11 @@
 
 아래 링크에서 개발 과정을 자세하게 확인할 수 있다. 리스트 별로 번호가 부여되어 있는데, 해당 번호는 다음과 같은 주제를 다룬다. 
 1. iOS App 개발
-
     1. [SwiftUI로 iOS Application UI 구성](https://taeminator1.tistory.com/10)
-2. 앱과 웹 연결
-
-    0. [아이폰 앱과 웹 페이지 간의 통신](https://taeminator1.tistory.com/12)
+2. 앱과 웹 연결([아이폰 앱과 웹 페이지 간의 통신](https://taeminator1.tistory.com/12))
     1. [iOS 앱에서 JavaScript 함수 실행하기](https://taeminator1.tistory.com/13)
     2. [iOS에서 Web Scraping해서 정보 가져오기](https://taeminator1.tistory.com/14)
 3. 서버 설정 및 웹페이지 작성
-
     1. [서버 할당과 웹페이지 작성](https://taeminator1.tistory.com/4)
     2. [웹 페이지 상태를 유지하는 방법 고찰](https://taeminator1.tistory.com/5)
     3. [Node.js를 이용한 웹 페이지 작성(개요)](https://taeminator1.tistory.com/6)
@@ -67,11 +63,8 @@
     [2](https://taeminator1.tistory.com/9)
     5. [Script Launcher를 이용해 서버 실행시키기](https://taeminator1.tistory.com/65)
 4. Node MCU 제어
-
     1. [Node MCU를 통해 Web Scraping해서 정보 가져오기](https://taeminator1.tistory.com/16)
-5. 하드웨어 개발(아두이노, 기구)
-
-    0. [하드웨어 파트 계획](https://taeminator1.tistory.com/17)
+5. 하드웨어 개발([하드웨어 파트 개발 계획](https://taeminator1.tistory.com/17))
     1. [창문 옮기기](https://taeminator1.tistory.com/22)
     2. 기구 제작
     [1](https://taeminator1.tistory.com/23)
