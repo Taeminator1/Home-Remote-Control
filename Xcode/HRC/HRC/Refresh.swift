@@ -5,36 +5,40 @@
 //  Created by 윤태민 on 7/18/21.
 //
 
+//  Struct to refresh view by scrolling down:
+//  - After scrolling at specific condition, run action.
+
 import SwiftUI
 
 struct Refresh {
-    var startOffset: CGFloat = 0
-    var offset: CGFloat = 0
-    var started: Bool
-    var released: Bool
+    let minMargin: CGFloat = 80.0               // Minimal margin to refresh.
+    var startOffset: CGFloat = 0                // Initial offset in the View
+    var offset: CGFloat = 0                     // Offset from the initial state.
+    var isStarted: Bool
+    var isReleased: Bool
     
     mutating func excute(reader: GeometryProxy, action: () -> Void) {
-        
         if startOffset == 0 {
             startOffset = reader.frame(in: .global).minY
         }
         
         offset = reader.frame(in: .global).minY
         
-        if offset - startOffset > 80 && !started {
-            started = true
+        // Checking if offset is more then minMargine.
+        if offset - startOffset > minMargin && !isStarted {
+            isStarted = true
             print("Pulled")
         }
         
-        // checking if refresh is started and drag is released ...
-        if startOffset == offset && started && !released {
+        // Checking if refresh is started and drag is released.
+        if startOffset == offset && isStarted && !isReleased {
             withAnimation(Animation.linear) {
-                released = true
+                isReleased = true
             }
-            released = false
-            started = false
-            action()
+            isReleased = false
+            isStarted = false
             print("Refreshed")
+            action()
         }
     }
 }

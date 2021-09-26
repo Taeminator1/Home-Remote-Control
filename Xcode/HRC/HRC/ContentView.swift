@@ -16,7 +16,7 @@ struct ContentView: View {
     @State var isConnected: Bool = false
     @State var buttonStates: [Bool] = [false, false]
     
-    @State var refresh = Refresh(started: false, released: false)
+    @State var refresh = Refresh(isStarted: false, isReleased: false)
     
     @State var record: String = UserDefaults.standard.string(forKey: "record") ?? ""
     

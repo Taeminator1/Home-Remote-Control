@@ -7,7 +7,8 @@
 
 import Foundation
 
-// https://stackoverflow.com/questions/24092884/get-nth-character-of-a-string-in-swift-programming-language
+//  To access sub String using range in subscript.
+//  Reference: https://stackoverflow.com/questions/24092884/get-nth-character-of-a-string-in-swift-programming-language
 extension String {
 
     var length: Int {
