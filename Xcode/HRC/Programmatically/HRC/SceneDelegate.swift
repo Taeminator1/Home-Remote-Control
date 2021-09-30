@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  HRC
 //
-//  Created by 윤태민 on 9/27/21.
+//  Created by 윤태민 on 9/30/21.
 //
 
 import UIKit
