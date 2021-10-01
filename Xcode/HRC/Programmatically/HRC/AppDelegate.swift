@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = UINavigationController(rootViewController: ViewController())
         window?.rootViewController = navigationController
         
+        navigationController.navigationBar.prefersLargeTitles = true
+        
         return true
     }
 }
