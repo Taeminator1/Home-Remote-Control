@@ -15,33 +15,73 @@ import UIKit
 class CustomTableViewCell: UITableViewCell {
 
     let title = UILabel()
-    let content = UILabel()
-//    let toggle: = UISwitch()
+    var label: UILabel?
+    var toggle: UISwitch?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         title.translatesAutoresizingMaskIntoConstraints = false
-        content.translatesAutoresizingMaskIntoConstraints = false
-//        toggle.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(title)
-        contentView.addSubview(content)
-//        contentView.addSubview(toggle)
         
         let views = [
             "title"     : title,
-            "content"   : content,
-//            "toggle"    : toggle,
         ]
         
         var allConstraints: [NSLayoutConstraint] = []
         allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[title]-|", options: [], metrics: nil, views: views)
-        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[content]-|", options: [], metrics: nil, views: views)
-//        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[toggle]-|", options: [], metrics: nil, views: views)
-        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-[title]-[content]-|", options: [], metrics: nil, views: views)
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-[title]-|", options: [], metrics: nil, views: views)
         NSLayoutConstraint.activate(allConstraints)
     }
+    
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, label: UILabel) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.label = label
+        
+        self.title.translatesAutoresizingMaskIntoConstraints = false
+        self.label!.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(self.title)
+        contentView.addSubview(self.label!)
+
+        let views = [
+            "title"     : self.title,
+            "label"     : self.label,
+        ]
+        
+        var allConstraints: [NSLayoutConstraint] = []
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[title]-|", options: [], metrics: nil, views: views as [String : Any])
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[label]-|", options: [], metrics: nil, views: views as [String : Any])
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-[title]-[label]-|", options: [], metrics: nil, views: views as [String : Any])
+        NSLayoutConstraint.activate(allConstraints)
+    }
+    
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, toggle: UISwitch) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.toggle = toggle
+        
+        self.title.translatesAutoresizingMaskIntoConstraints = false
+        self.toggle!.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(self.title)
+        contentView.addSubview(self.toggle!)
+
+        let views = [
+            "title"     : self.title,
+            "toggle"     : self.toggle,
+        ]
+        
+        var allConstraints: [NSLayoutConstraint] = []
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[title]-|", options: [], metrics: nil, views: views as [String : Any])
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[toggle]-|", options: [], metrics: nil, views: views as [String : Any])
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-[title]-[toggle]-|", options: [], metrics: nil, views: views as [String : Any])
+        NSLayoutConstraint.activate(allConstraints)
+    }
+    
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

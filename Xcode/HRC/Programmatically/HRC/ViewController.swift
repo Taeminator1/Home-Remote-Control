@@ -6,6 +6,7 @@
 //
 
 //  Refrenece:
+//  - https://guides.codepath.com/ios/Table-View-Guide
 //  - Pull to refresh: https://cocoacasts.com/how-to-add-pull-to-refresh-to-a-table-view-or-collection-view
 
 import UIKit
@@ -71,29 +72,6 @@ class ViewController: UIViewController {
         isConnected.toggle()
         tableView.reloadData()
         refreshControl.endRefreshing()
-        
-//        var index: Int = 0
-//
-//        let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-//            guard let data = data else {
-//                print(String(describing: error))
-//                isConnected = false
-//                return
-//            }
-//
-//            isConnected = true
-//            if let htmlFromURL = String(data: data, encoding: .utf8) {      // Get String starting with "\'label" in HTML from server
-//                for i in 0 ... htmlFromURL.count {
-//                    if htmlFromURL[i ..< (i + 6)] == "\'label" {
-//                        buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
-//
-//                        index += 1
-//                        if index == buttonStates.count { break }
-//                    }
-//                }
-//            }
-//        }
-//        task.resume()
     }
 }
 
@@ -126,14 +104,19 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: tableViewCellId, for: indexPath) as! CustomTableViewCell
+        let cell: CustomTableViewCell
         
         if indexPath.section == 0 {
+            cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, label: UILabel())
             cell.title.text = "\(networkSection[indexPath.row])"
-            cell.content.text = isConnected ? "Connected" : "Failed"
+            cell.label?.text = isConnected ? "Connected" : "Failed"
         }
         else if indexPath.section == 1 {
+            cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, toggle: UISwitch())
             cell.title.text = "\(controlsSection[indexPath.row])"
+        }
+        else {
+            cell = CustomTableViewCell(style: .default, reuseIdentifier: nil)
         }
         
         return cell
