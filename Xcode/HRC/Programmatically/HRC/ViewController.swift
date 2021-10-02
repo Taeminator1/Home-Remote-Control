@@ -9,7 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var tableView = UITableView()
+    var tableView = UITableView(frame: CGRect.zero, style: .insetGrouped)
     let tableViewCellId = "tableViewCellId"
     private let sections: [String] = ["Network", "Controls", "Test"]
     private let networkSection: [String] = ["Status"]
@@ -29,12 +29,19 @@ class ViewController: UIViewController {
     
     func setupTableView() {
         tableView.dataSource = self
-        tableView.dataSource = self
+        tableView.delegate = self
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: tableViewCellId)
         tableView.tableFooterView = UIView()
         
         view = tableView
+    }
+}
+
+extension ViewController: UITableViewDelegate {
+    // To make cell not selectable
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return nil
     }
 }
 
