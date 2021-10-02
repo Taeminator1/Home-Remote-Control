@@ -5,6 +5,9 @@
 //  Created by 윤태민 on 9/30/21.
 //
 
+//  Refrenece:
+//  - Pull to refresh: https://cocoacasts.com/how-to-add-pull-to-refresh-to-a-table-view-or-collection-view
+
 import UIKit
 
 class ViewController: UIViewController {
@@ -16,12 +19,23 @@ class ViewController: UIViewController {
     private let controlsSection: [String] = ["Close the window", "Turn on the airconditioner"]
     private let testSection: [String] = [" ", " "]
     
+    var isConnected: Bool = false
+    
+    private let refreshControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.addSubview(tableView)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
         
         //auto layout for the table view
         let views = ["view": view!, "tableView" : tableView]
@@ -44,6 +58,42 @@ class ViewController: UIViewController {
         
         tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: tableViewCellId)
         tableView.tableFooterView = UIView()
+    }
+    
+    @objc func refresh(_ sender: AnyObject) {
+        // Code to refresh table view
+        print("Pulled")
+        fetchData(url: "")
+    }
+    
+    // fetch data from sever
+    private func fetchData(url: String) -> Void {
+        isConnected.toggle()
+        tableView.reloadData()
+        refreshControl.endRefreshing()
+        
+//        var index: Int = 0
+//
+//        let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+//            guard let data = data else {
+//                print(String(describing: error))
+//                isConnected = false
+//                return
+//            }
+//
+//            isConnected = true
+//            if let htmlFromURL = String(data: data, encoding: .utf8) {      // Get String starting with "\'label" in HTML from server
+//                for i in 0 ... htmlFromURL.count {
+//                    if htmlFromURL[i ..< (i + 6)] == "\'label" {
+//                        buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
+//
+//                        index += 1
+//                        if index == buttonStates.count { break }
+//                    }
+//                }
+//            }
+//        }
+//        task.resume()
     }
 }
 
@@ -70,9 +120,6 @@ extension ViewController: UITableViewDataSource {
         else if section == 1 {
             return controlsSection.count
         }
-        else if section == 2 {
-            return testSection.count
-        }
         else {
             return 0
         }
@@ -82,15 +129,11 @@ extension ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: tableViewCellId, for: indexPath) as! CustomTableViewCell
         
         if indexPath.section == 0 {
-//            cell.textLabel?.text = "\(networkSection[indexPath.row])"
             cell.title.text = "\(networkSection[indexPath.row])"
-            cell.content.text = "\(networkSection[indexPath.row])"
+            cell.content.text = isConnected ? "Connected" : "Failed"
         }
         else if indexPath.section == 1 {
             cell.title.text = "\(controlsSection[indexPath.row])"
-        }
-        else if indexPath.section == 2 {
-            cell.title.text = "\(testSection[indexPath.row])"
         }
         
         return cell
