@@ -14,27 +14,36 @@ class ViewController: UIViewController {
     private let sections: [String] = ["Network", "Controls", "Test"]
     private let networkSection: [String] = ["Status"]
     private let controlsSection: [String] = ["Close the window", "Turn on the airconditioner"]
-    private let testSection: [String] = ["", ""]
+    private let testSection: [String] = [" ", " "]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        view.addSubview(tableView)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        //auto layout for the table view
+        let views = ["view": view!, "tableView" : tableView]
+        var allConstraints: [NSLayoutConstraint] = []
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[tableView]|", options: [], metrics: nil, views: views as [String : Any])
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[tableView]|", options: [], metrics: nil, views: views as [String : Any])
+        NSLayoutConstraint.activate(allConstraints)
+        
         setupNavigationBar()
         setupTableView()
     }
     
     func setupNavigationBar() {
-        title = "HRC"
+        navigationItem.title = "HRC"
     }
     
     func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: tableViewCellId)
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: tableViewCellId)
         tableView.tableFooterView = UIView()
-        
-        view = tableView
     }
 }
 
@@ -70,19 +79,22 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: tableViewCellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: tableViewCellId, for: indexPath) as! CustomTableViewCell
         
         if indexPath.section == 0 {
-            cell.textLabel?.text = "\(networkSection[indexPath.row])"
+//            cell.textLabel?.text = "\(networkSection[indexPath.row])"
+            cell.title.text = "\(networkSection[indexPath.row])"
+            cell.content.text = "\(networkSection[indexPath.row])"
         }
         else if indexPath.section == 1 {
-            cell.textLabel?.text = "\(controlsSection[indexPath.row])"
+            cell.title.text = "\(controlsSection[indexPath.row])"
         }
         else if indexPath.section == 2 {
-            cell.textLabel?.text = "\(testSection[indexPath.row])"
+            cell.title.text = "\(testSection[indexPath.row])"
         }
         
         return cell
     }
 }
+
 
