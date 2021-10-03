@@ -20,23 +20,24 @@ class ViewController: UIViewController {
     private let controlsSection: [String] = ["Close the window", "Turn on the airconditioner"]
     private let testSection: [String] = [" ", " "]
     
-    var isConnected: Bool = false
+    var isConnected: Bool = false {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     private let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        view.addSubview(tableView)
         
+        view.addSubview(tableView)
+        fetchData(url: PersonalInfo.strURL)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            tableView.addSubview(refreshControl)
-        }
+        tableView.addSubview(refreshControl)
         
         //auto layout for the table view
         let views = ["view": view!, "tableView" : tableView]
@@ -64,14 +65,38 @@ class ViewController: UIViewController {
     @objc func refresh(_ sender: AnyObject) {
         // Code to refresh table view
         print("Pulled")
-        fetchData(url: "")
+        fetchData(url: PersonalInfo.strURL)
+        refreshControl.endRefreshing()
     }
     
     // fetch data from sever
     private func fetchData(url: String) -> Void {
-        isConnected.toggle()
-        tableView.reloadData()
-        refreshControl.endRefreshing()
+//        var index: Int = 0
+        
+        let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+            guard let data = data else {
+                print(String(describing: error))
+                DispatchQueue.main.async {      // UI 작업 메인 쓰레드로 보내기
+                    self.isConnected = false
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {      // UI 작업 메인 쓰레드로 보내기
+                self.isConnected = true
+            }
+            if let htmlFromURL = String(data: data, encoding: .utf8) {      // Get String starting with "\'label" in HTML from server
+                for i in 0 ... htmlFromURL.count {
+                    if htmlFromURL[i ..< (i + 6)] == "\'label" {
+//                        buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
+//
+//                        index += 1
+//                        if index == buttonStates.count { break }
+                    }
+                }
+            }
+        }
+        task.resume()
     }
 }
 
@@ -112,7 +137,9 @@ extension ViewController: UITableViewDataSource {
             cell.label?.text = isConnected ? "Connected" : "Failed"
         }
         else if indexPath.section == 1 {
-            cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, toggle: UISwitch())
+            let toggle = UISwitch()
+            toggle.addTarget(self, action: #selector(toggleTouched(_:)), for: .valueChanged)
+            cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, toggle: toggle)
             cell.title.text = "\(controlsSection[indexPath.row])"
         }
         else {
@@ -120,6 +147,15 @@ extension ViewController: UITableViewDataSource {
         }
         
         return cell
+    }
+    
+    @objc func toggleTouched(_ sender: UISwitch) {
+        if sender.isOn {
+            print("a")
+        }
+        else {
+            print("b")
+        }
     }
 }
 
