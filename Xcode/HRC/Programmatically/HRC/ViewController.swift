@@ -13,26 +13,23 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var tableView = UITableView(frame: CGRect.zero, style: .insetGrouped)
-    let tableViewCellId = "tableViewCellId"
-    private let sections: [String] = ["Network", "Controls", "Test"]
+    private let tableView = UITableView(frame: CGRect.zero, style: .insetGrouped)
+    private let tableViewCellId = "tableViewCellId"
+    
+    private let sections: [String] = ["Network", "Controls"]
     private let networkSection: [String] = ["Status"]
     private let controlsSection: [String] = ["Close the window", "Turn on the airconditioner"]
-    private let testSection: [String] = [" ", " "]
     
-    var isConnected: Bool = false {
+    private let refreshControl = UIRefreshControl()
+    private var buttons: [UISwitch] = []
+    private var isConnected: Bool = false {
         willSet {
             buttons.forEach { $0.isEnabled = newValue }
         }
-        
         didSet {
             tableView.reloadData()
         }
     }
-    
-    var buttons: [UISwitch] = []
-    
-    private let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,13 +43,7 @@ class ViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
         
-        //auto layout for the table view
-        let views = ["view": view!, "tableView" : tableView]
-        var allConstraints: [NSLayoutConstraint] = []
-        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[tableView]|", options: [], metrics: nil, views: views as [String : Any])
-        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[tableView]|", options: [], metrics: nil, views: views as [String : Any])
-        NSLayoutConstraint.activate(allConstraints)
-        
+        setupAutoLayout()
         setupNavigationBar()
         setupTableView()
         
@@ -64,11 +55,22 @@ class ViewController: UIViewController {
         }
     }
     
-    func setupNavigationBar() {
+    private func setupAutoLayout() {
+        let views = [
+            "view"      : view!,
+            "tableView" : tableView,
+        ]
+        var allConstraints: [NSLayoutConstraint] = []
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[tableView]|", options: [], metrics: nil, views: views)
+        allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[tableView]|", options: [], metrics: nil, views: views)
+        NSLayoutConstraint.activate(allConstraints)
+    }
+    
+    private func setupNavigationBar() {
         navigationItem.title = "HRC"
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -88,7 +90,7 @@ class ViewController: UIViewController {
         javaScriptFunction(index: sender.tag)
     }
     
-    func javaScriptFunction(index: Int) -> Void {
+    private func javaScriptFunction(index: Int) -> Void {
         // Refer to app.js file in Server folder.
         print(AppDelegate.wkWebView)
         AppDelegate.wkWebView.evaluateJavaScript("buttonClicked('btn\(index + 1)');", completionHandler: { (result, error) in
@@ -105,13 +107,13 @@ class ViewController: UIViewController {
         let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
             guard let data = data else {
                 print(String(describing: error))
-                DispatchQueue.main.async {      // UI 작업 메인 쓰레드로 보내기
+                DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
                     self.isConnected = false
                 }
                 return
             }
             
-            DispatchQueue.main.async {      // UI 작업 메인 쓰레드로 보내기
+            DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
                 self.isConnected = true
             }
             
@@ -119,12 +121,7 @@ class ViewController: UIViewController {
             if let htmlFromURL = String(data: data, encoding: .utf8) {      // Get String starting with "\'label" in HTML from server
                 for i in 0 ... htmlFromURL.count {
                     if htmlFromURL[i ..< (i + 6)] == "\'label" {
-                        if htmlFromURL[(i + 10) ..< (i + 15)] == "true " {
-                            tmpButtonStates.append(true)
-                        }
-                        else {
-                            tmpButtonStates.append(false)
-                        }
+                        tmpButtonStates.append(htmlFromURL[(i + 10) ..< (i + 15)] == "true ")
                         
                         index += 1
                         if index == self.controlsSection.count { break }
@@ -132,7 +129,7 @@ class ViewController: UIViewController {
                 }
             }
             
-            DispatchQueue.main.async {      // UI 작업 메인 쓰레드로 보내기
+            DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
                 for i in 0 ..< self.controlsSection.count {
                     self.buttons[i].isOn = tmpButtonStates[i]
                 }
@@ -171,7 +168,7 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: CustomTableViewCell
+        let cell: CustomTableViewCell           // 각 셀마다 형식이 다를 수 있어 tableView.dequeueReusableCell 사용 안 함
         
         if indexPath.section == 0 {
             cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, label: UILabel())
@@ -186,10 +183,9 @@ extension ViewController: UITableViewDataSource {
             cell = CustomTableViewCell(style: .default, reuseIdentifier: nil)
         }
         
+        cell.selectionStyle = .none
         return cell
     }
-    
-    
 }
 
 

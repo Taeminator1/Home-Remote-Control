@@ -45,12 +45,12 @@ class CustomTableViewCell: UITableViewCell {
         
         contentView.addSubview(self.title)
         contentView.addSubview(self.label!)
-
+        
+        // For auto layout of the cell
         let views = [
             "title"     : self.title,
             "label"     : self.label,
         ]
-        
         var allConstraints: [NSLayoutConstraint] = []
         allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[title]-|", options: [], metrics: nil, views: views as [String : Any])
         allConstraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[label]-|", options: [], metrics: nil, views: views as [String : Any])
