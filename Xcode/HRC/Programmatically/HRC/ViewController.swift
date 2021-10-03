@@ -21,10 +21,16 @@ class ViewController: UIViewController {
     private let testSection: [String] = [" ", " "]
     
     var isConnected: Bool = false {
+        willSet {
+            buttons.forEach { $0.isEnabled = newValue }
+        }
+        
         didSet {
             tableView.reloadData()
         }
     }
+    
+    var buttons: [UISwitch] = []
     
     private let refreshControl = UIRefreshControl()
     
@@ -33,6 +39,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         view.addSubview(tableView)
+        AppDelegate.wkWebView.load(AppDelegate.request)
         fetchData(url: PersonalInfo.strURL)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -48,6 +55,13 @@ class ViewController: UIViewController {
         
         setupNavigationBar()
         setupTableView()
+        
+        for index in 0 ..< controlsSection.count {
+            let button = UISwitch()
+            button.addTarget(self, action: #selector(toggleTouched(_:)), for: .valueChanged)
+            button.tag = index
+            buttons.append(button)
+        }
     }
     
     func setupNavigationBar() {
@@ -65,13 +79,28 @@ class ViewController: UIViewController {
     @objc func refresh(_ sender: AnyObject) {
         // Code to refresh table view
         print("Pulled")
-        fetchData(url: PersonalInfo.strURL)
+        fetchData(url: AppDelegate.url)
         refreshControl.endRefreshing()
+    }
+    
+    @objc func toggleTouched(_ sender: UISwitch) {
+        print("Button\(sender.tag + 1) is changed")
+        javaScriptFunction(index: sender.tag)
+    }
+    
+    func javaScriptFunction(index: Int) -> Void {
+        // Refer to app.js file in Server folder.
+        print(AppDelegate.wkWebView)
+        AppDelegate.wkWebView.evaluateJavaScript("buttonClicked('btn\(index + 1)');", completionHandler: { (result, error) in
+            if let anError = error {
+                print("evaluateJavaScript infoUpdate Error \(anError.localizedDescription)")
+            }
+        })
     }
     
     // fetch data from sever
     private func fetchData(url: String) -> Void {
-//        var index: Int = 0
+        var index: Int = 0
         
         let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
             guard let data = data else {
@@ -85,14 +114,27 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {      // UI 작업 메인 쓰레드로 보내기
                 self.isConnected = true
             }
+            
+            var tmpButtonStates: [Bool] = []
             if let htmlFromURL = String(data: data, encoding: .utf8) {      // Get String starting with "\'label" in HTML from server
                 for i in 0 ... htmlFromURL.count {
                     if htmlFromURL[i ..< (i + 6)] == "\'label" {
-//                        buttonStates[index]  = htmlFromURL[(i + 10) ..< (i + 15)] == "true " ? true : false
-//
-//                        index += 1
-//                        if index == buttonStates.count { break }
+                        if htmlFromURL[(i + 10) ..< (i + 15)] == "true " {
+                            tmpButtonStates.append(true)
+                        }
+                        else {
+                            tmpButtonStates.append(false)
+                        }
+                        
+                        index += 1
+                        if index == self.controlsSection.count { break }
                     }
+                }
+            }
+            
+            DispatchQueue.main.async {      // UI 작업 메인 쓰레드로 보내기
+                for i in 0 ..< self.controlsSection.count {
+                    self.buttons[i].isOn = tmpButtonStates[i]
                 }
             }
         }
@@ -137,9 +179,7 @@ extension ViewController: UITableViewDataSource {
             cell.label?.text = isConnected ? "Connected" : "Failed"
         }
         else if indexPath.section == 1 {
-            let toggle = UISwitch()
-            toggle.addTarget(self, action: #selector(toggleTouched(_:)), for: .valueChanged)
-            cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, toggle: toggle)
+            cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, toggle: buttons[indexPath.row])
             cell.title.text = "\(controlsSection[indexPath.row])"
         }
         else {
@@ -149,14 +189,7 @@ extension ViewController: UITableViewDataSource {
         return cell
     }
     
-    @objc func toggleTouched(_ sender: UISwitch) {
-        if sender.isOn {
-            print("a")
-        }
-        else {
-            print("b")
-        }
-    }
+    
 }
 
 
