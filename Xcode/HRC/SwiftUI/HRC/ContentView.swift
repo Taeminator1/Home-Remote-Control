@@ -29,7 +29,7 @@ struct ContentView: View {
                 controls
                 test
             }
-//            .listStyle(InsetGroupedListStyle())
+            .listStyle(InsetGroupedListStyle())
             .navigationTitle("HRC")
         }
         .navigationViewStyle(StackNavigationViewStyle())
