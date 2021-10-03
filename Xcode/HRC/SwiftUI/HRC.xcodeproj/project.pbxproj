@@ -14,7 +14,6 @@
 		34ABF8B72667DE7800BC055D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ABF8B62667DE7800BC055D /* Assets.xcassets */; };
 		34ABF8BA2667DE7800BC055D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ABF8B92667DE7800BC055D /* Preview Assets.xcassets */; };
 		34ABF8C32667DEBA00BC055D /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ABF8C22667DEBA00BC055D /* ToggleView.swift */; };
-		34EE5A6B2701ECCA003C142C /* PersonalInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EE5A6A2701ECCA003C142C /* PersonalInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		34ABF8B92667DE7800BC055D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		34ABF8BB2667DE7800BC055D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34ABF8C22667DEBA00BC055D /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
-		34EE5A6A2701ECCA003C142C /* PersonalInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +63,6 @@
 				34ABF8C22667DEBA00BC055D /* ToggleView.swift */,
 				34813BB826A4587C0039FD6C /* Refresh.swift */,
 				3443ECC5269C627A0095CADD /* Extension.swift */,
-				34EE5A6A2701ECCA003C142C /* PersonalInfo.swift */,
 				34ABF8B62667DE7800BC055D /* Assets.xcassets */,
 				34ABF8BB2667DE7800BC055D /* Info.plist */,
 				34ABF8B82667DE7800BC055D /* Preview Content */,
@@ -155,7 +152,6 @@
 				34813BB926A4587C0039FD6C /* Refresh.swift in Sources */,
 				34ABF8C32667DEBA00BC055D /* ToggleView.swift in Sources */,
 				34ABF8B32667DE7500BC055D /* HRCApp.swift in Sources */,
-				34EE5A6B2701ECCA003C142C /* PersonalInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
