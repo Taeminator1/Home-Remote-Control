@@ -17,13 +17,13 @@ struct ModelData {
     static let stringData = """
         [
             {
-                "section": "Network",
+                "title": "Network",
                 "contents": [
                     "Status"
                 ]
             },
             {
-                "section": "Controls",
+                "title": "Controls",
                 "contents": [
                     "Close the window",
                     "Turn on the airconditioner"
@@ -39,7 +39,6 @@ struct ModelData {
             let decoder = JSONDecoder()
             do {
                 sections = try decoder.decode([Section].self, from: jsonData)
-                print(sections)
             }
             catch {
             }

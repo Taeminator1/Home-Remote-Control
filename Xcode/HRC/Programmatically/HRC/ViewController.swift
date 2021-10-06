@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     private let tableView = UITableView(frame: CGRect.zero, style: .insetGrouped)
     private let tableViewCellId = "tableViewCellId"
     
+    private let sectionData: [Section] = ModelData.getSectionData()
     private let sections: [String] = ["Network", "Controls"]
     private let networkSection: [String] = ["Status"]
     private let controlsSection: [String] = ["Close the window", "Turn on the airconditioner"]
@@ -47,7 +48,7 @@ class ViewController: UIViewController {
         setupNavigationBar()
         setupTableView()
         
-        for index in 0 ..< controlsSection.count {
+        for index in 0 ..< sectionData[1].contents.count {
             let button = UISwitch()
             button.addTarget(self, action: #selector(toggleTouched(_:)), for: .valueChanged)
             button.tag = index
@@ -124,13 +125,13 @@ class ViewController: UIViewController {
                         tmpButtonStates.append(htmlFromURL[(i + 10) ..< (i + 15)] == "true ")
                         
                         index += 1
-                        if index == self.controlsSection.count { break }
+                        if index == self.sectionData[1].contents.count { break }
                     }
                 }
             }
             
             DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
-                for i in 0 ..< self.controlsSection.count {
+                for i in 0 ..< self.sectionData[1].contents.count {
                     self.buttons[i].isOn = tmpButtonStates[i]
                 }
             }
@@ -148,23 +149,15 @@ extension ViewController: UITableViewDelegate {
 
 extension ViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
+        return sectionData.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].uppercased()
+        return sectionData[section].title.uppercased()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return networkSection.count
-        }
-        else if section == 1 {
-            return controlsSection.count
-        }
-        else {
-            return 0
-        }
+        return sectionData[section].contents.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -172,18 +165,18 @@ extension ViewController: UITableViewDataSource {
         
         if indexPath.section == 0 {
             cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, label: UILabel())
-            cell.title.text = "\(networkSection[indexPath.row])"
+            cell.title.text = sectionData[indexPath.section].contents[indexPath.row]
             cell.label?.text = isConnected ? "Connected" : "Failed"
         }
         else if indexPath.section == 1 {
             cell = CustomTableViewCell(style: .default, reuseIdentifier: nil, toggle: buttons[indexPath.row])
-            cell.title.text = "\(controlsSection[indexPath.row])"
+            cell.title.text = sectionData[indexPath.section].contents[indexPath.row]
         }
         else {
             cell = CustomTableViewCell(style: .default, reuseIdentifier: nil)
         }
         
-        cell.selectionStyle = .none
+        cell.selectionStyle = .none             // 눌려도 아무 애니메이션 없음
         return cell
     }
 }
