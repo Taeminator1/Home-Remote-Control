@@ -24,9 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.backgroundColor = .systemBackground
         
+//        window?.rootViewController = ViewController()
         let navigationController = UINavigationController(rootViewController: ViewController())
         window?.rootViewController = navigationController
-        
+
         navigationController.navigationBar.prefersLargeTitles = true
         
         return true

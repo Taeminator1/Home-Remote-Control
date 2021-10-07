@@ -17,9 +17,6 @@ class ViewController: UIViewController {
     private let tableViewCellId = "tableViewCellId"
     
     private let sectionData: [Section] = ModelData.getSectionData()
-    private let sections: [String] = ["Network", "Controls"]
-    private let networkSection: [String] = ["Status"]
-    private let controlsSection: [String] = ["Close the window", "Turn on the airconditioner"]
     
     private let refreshControl = UIRefreshControl()
     private var buttons: [UISwitch] = []
@@ -153,7 +150,7 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionData[section].title.uppercased()
+        return sectionData[section].section.uppercased()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

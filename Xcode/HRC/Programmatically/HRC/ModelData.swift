@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 struct Section: Codable {
-    var title: String
+    var section: String
     var contents: [String]
 }
 
@@ -17,13 +17,13 @@ struct ModelData {
     static let stringData = """
         [
             {
-                "title": "Network",
+                "section": "Network",
                 "contents": [
                     "Status"
                 ]
             },
             {
-                "title": "Controls",
+                "section": "Controls",
                 "contents": [
                     "Close the window",
                     "Turn on the airconditioner"

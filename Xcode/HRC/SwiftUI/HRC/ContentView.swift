@@ -68,7 +68,7 @@ struct ContentView: View {
 // MARK:- Test Section
 extension ContentView {
     var networkStatus: some View {
-        Section(header: Text("Network")) {
+        Section(header: Text("Network").padding(.horizontal)) {
             HStack {
                 Text("Status")
                 Spacer()
@@ -81,7 +81,7 @@ extension ContentView {
 // MARK:- Controls
 extension ContentView {
     var controls: some View {
-        Section(header: Text("Controls")) {
+        Section(header: Text("Controls").padding(.horizontal)) {
             ForEach(0 ..< buttonStates.count) {
                 ToggleView(isChecked: $buttonStates[$0], index: $0, toggleName: buttonNames[$0])
                     .disabled(!isConnected)
@@ -101,7 +101,7 @@ extension ContentView {
 // MARK:- Network status
 extension ContentView {
     var test: some View {
-        Section(header: Text("Test")) {
+        Section(header: Text("Test").padding(.horizontal)) {
             Text("\(UserDefaults.standard.integer(forKey: "attemptsNumber"))")
                 .onAppear() {
                     let tmp: Int = UserDefaults.standard.integer(forKey: "attemptsNumber")
