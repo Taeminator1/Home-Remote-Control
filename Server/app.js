@@ -11,7 +11,6 @@
 
 var http = require('http');
 var fs = require('fs');
-var url = require('url');
 var qs = require('querystring');
 
 const inPort = 0;            // Internal Port Number
@@ -80,7 +79,7 @@ function loadHTML(readStr) {
 var app = http.createServer(function(request,response){
   var baseURL = 'http://' + request.headers.host + '/';
   var pathname = new URL(request.url, baseURL).pathname
-  var title = 'data.txt';         // Store states of buttons.
+  var title = 'data.txt';         // Name of file to store button' state.
 
   if(pathname === '/'){           // When write address in browser,
     if (!fs.existsSync(`${title}`)) {     // If data.txt file doesn't exist, create the file.
