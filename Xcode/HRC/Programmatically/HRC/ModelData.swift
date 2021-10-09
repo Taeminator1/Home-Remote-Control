@@ -5,6 +5,12 @@
 //  Created by 윤태민 on 10/5/21.
 //
 
+//  For data that is used in cell of TableView:
+//  - Format: Json.
+//  - Data
+//      - section: Title of section.
+//      - contents: Various controls in a specific section.
+
 import Foundation
 import UIKit
 

@@ -5,6 +5,9 @@
 //  Created by 윤태민 on 9/30/21.
 //
 
+//  Decide view controller by using code:
+//  - UINavigationViewController
+
 import UIKit
 import WebKit
 

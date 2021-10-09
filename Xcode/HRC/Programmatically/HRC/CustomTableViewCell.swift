@@ -5,6 +5,8 @@
 //  Created by 윤태민 on 10/2/21.
 //
 
+//  Cell of TableView: Initialize depending on parameter.
+
 //  References:
 //  - https://www.mysamplecode.com/2019/04/ios-swift-create-UITableView-custom-UITableViewCell.html
 //  - https://softauthor.com/ios-uitableview-programmatically-in-swift/#implement-uitableviewdatasource-protocol-methods

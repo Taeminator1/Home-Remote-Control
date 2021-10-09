@@ -5,6 +5,10 @@
 //  Created by 윤태민 on 9/30/21.
 //
 
+//  Initial view for inital excution of the Application:
+//  - Network Status
+//  - Controls
+
 //  Refrenece:
 //  - https://guides.codepath.com/ios/Table-View-Guide
 //  - Pull to refresh: https://cocoacasts.com/how-to-add-pull-to-refresh-to-a-table-view-or-collection-view
