@@ -19,8 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let wkWebView = WKWebView()
     static let request: URLRequest = URLRequest.init(url: NSURL.init(string: AppDelegate.url)! as URL)
     
-    var a: Int = 3
-    
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

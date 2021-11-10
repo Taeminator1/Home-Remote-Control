@@ -14,6 +14,7 @@
 //  - Pull to refresh: https://cocoacasts.com/how-to-add-pull-to-refresh-to-a-table-view-or-collection-view
 
 import UIKit
+import RxSwift
 
 class ViewController: UIViewController {
     
@@ -39,7 +40,37 @@ class ViewController: UIViewController {
         
         view.addSubview(tableView)
         AppDelegate.wkWebView.load(AppDelegate.request)
-        fetchData(url: PersonalInfo.strURL)
+        _ = fetchData(AppDelegate.url)
+            .subscribe { event in
+                switch event {
+                case .next(let htmlFromURL):
+                    var index: Int = 0
+                    var tmpButtonStates: [Bool] = []
+                    // Get String starting with "\'label" in HTML from server
+                    for i in 0 ... htmlFromURL.count {
+                        if htmlFromURL[i ..< (i + 6)] == "\'label" {
+                            tmpButtonStates.append(htmlFromURL[(i + 10) ..< (i + 15)] == "true ")
+                            
+                            index += 1
+                            if index == self.sectionData[1].contents.count { break }
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
+                        self.isConnected = true
+                        for i in 0 ..< self.sectionData[1].contents.count {
+                            self.buttons[i].isOn = tmpButtonStates[i]
+                        }
+                    }
+                case .completed:
+                    print("Loaded")
+                    break
+                case .error:
+                    DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
+                        self.isConnected = false
+                    }
+                }
+            }
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
@@ -82,9 +113,39 @@ class ViewController: UIViewController {
     
     @objc func refresh(_ sender: AnyObject) {
         // Code to refresh table view
-        print("Pulled")
-        fetchData(url: AppDelegate.url)
-        refreshControl.endRefreshing()
+        _ = fetchData(AppDelegate.url)
+            .subscribe { event in
+                switch event {
+                case .next(let htmlFromURL):
+                    var index: Int = 0
+                    var tmpButtonStates: [Bool] = []
+                    // Get String starting with "\'label" in HTML from server
+                    for i in 0 ... htmlFromURL.count {
+                        if htmlFromURL[i ..< (i + 6)] == "\'label" {
+                            tmpButtonStates.append(htmlFromURL[(i + 10) ..< (i + 15)] == "true ")
+                            
+                            index += 1
+                            if index == self.sectionData[1].contents.count { break }
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
+                        self.isConnected = true
+                        for i in 0 ..< self.sectionData[1].contents.count {
+                            self.buttons[i].isOn = tmpButtonStates[i]
+                        }
+                        self.refreshControl.endRefreshing()
+                    }
+                case .completed:
+                    print("Pulled")
+                    break
+                case .error:
+                    DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
+                        self.isConnected = false
+                        self.refreshControl.endRefreshing()
+                    }
+                }
+            }
     }
     
     @objc func toggleTouched(_ sender: UISwitch) {
@@ -103,41 +164,27 @@ class ViewController: UIViewController {
     }
     
     // fetch data from sever
-    private func fetchData(url: String) -> Void {
-        var index: Int = 0
-        
-        let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-            guard let data = data else {
-                print(String(describing: error))
-                DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
-                    self.isConnected = false
+    private func fetchData(_ url: String) -> Observable<String> {
+        return Observable.create { emitter in
+            let url = URL(string: url)!
+            let task = URLSession.shared.dataTask(with: url) { (data, _, error) in
+                guard error == nil else {
+                    emitter.onError(error!)
+                    return
                 }
-                return
-            }
-            
-            DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
-                self.isConnected = true
-            }
-            
-            var tmpButtonStates: [Bool] = []
-            if let htmlFromURL = String(data: data, encoding: .utf8) {      // Get String starting with "\'label" in HTML from server
-                for i in 0 ... htmlFromURL.count {
-                    if htmlFromURL[i ..< (i + 6)] == "\'label" {
-                        tmpButtonStates.append(htmlFromURL[(i + 10) ..< (i + 15)] == "true ")
-                        
-                        index += 1
-                        if index == self.sectionData[1].contents.count { break }
-                    }
+                
+                if let tmpData = data, let htmlFromURL = String(data: tmpData, encoding: .utf8) {
+                    emitter.onNext(htmlFromURL)
                 }
+                
+                emitter.onCompleted()
             }
+            task.resume()
             
-            DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
-                for i in 0 ..< self.sectionData[1].contents.count {
-                    self.buttons[i].isOn = tmpButtonStates[i]
-                }
+            return Disposables.create() {
+                task.cancel()
             }
         }
-        task.resume()
     }
 }
 
