@@ -16,9 +16,11 @@
 		34A45ABC270947BF00F87D45 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A45ABB270947BF00F87D45 /* Extension.swift */; };
 		34A45ACF2709596900F87D45 /* PersonalInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A45ACE2709596900F87D45 /* PersonalInfo.swift */; };
 		34FFCE622708637F00258901 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FFCE612708637F00258901 /* CustomTableViewCell.swift */; };
+		D52C97CEF0CEF0BD1BE77E58 /* Pods_HRC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 629AD4AF7D25780206777019 /* Pods_HRC.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C70BBDB3AEC4CF3352EFF1B /* Pods-HRC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HRC.debug.xcconfig"; path = "Target Support Files/Pods-HRC/Pods-HRC.debug.xcconfig"; sourceTree = "<group>"; };
 		346DEB72270602BA00079124 /* HRC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HRC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		346DEB75270602BA00079124 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		346DEB79270602BA00079124 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -30,6 +32,8 @@
 		34A45ABB270947BF00F87D45 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		34A45ACE2709596900F87D45 /* PersonalInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInfo.swift; sourceTree = "<group>"; };
 		34FFCE612708637F00258901 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		46FCFAC565EADD401158510C /* Pods-HRC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HRC.release.xcconfig"; path = "Target Support Files/Pods-HRC/Pods-HRC.release.xcconfig"; sourceTree = "<group>"; };
+		629AD4AF7D25780206777019 /* Pods_HRC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HRC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D52C97CEF0CEF0BD1BE77E58 /* Pods_HRC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +53,8 @@
 			children = (
 				346DEB74270602BA00079124 /* HRC */,
 				346DEB73270602BA00079124 /* Products */,
+				4AAE38DD3282D5B1296E0827 /* Pods */,
+				DF67FD494A030A7B75B16472 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,6 +83,24 @@
 			path = HRC;
 			sourceTree = "<group>";
 		};
+		4AAE38DD3282D5B1296E0827 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2C70BBDB3AEC4CF3352EFF1B /* Pods-HRC.debug.xcconfig */,
+				46FCFAC565EADD401158510C /* Pods-HRC.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		DF67FD494A030A7B75B16472 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				629AD4AF7D25780206777019 /* Pods_HRC.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -83,9 +108,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 346DEB86270602BD00079124 /* Build configuration list for PBXNativeTarget "HRC" */;
 			buildPhases = (
+				0EADE47B80A60533B9171665 /* [CP] Check Pods Manifest.lock */,
 				346DEB6E270602BA00079124 /* Sources */,
 				346DEB6F270602BA00079124 /* Frameworks */,
 				346DEB70270602BA00079124 /* Resources */,
+				67D257AECB9925DCF26D128B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -140,6 +167,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0EADE47B80A60533B9171665 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HRC-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		67D257AECB9925DCF26D128B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HRC/Pods-HRC-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HRC/Pods-HRC-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HRC/Pods-HRC-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		346DEB6E270602BA00079124 /* Sources */ = {
@@ -295,6 +364,7 @@
 		};
 		346DEB87270602BD00079124 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2C70BBDB3AEC4CF3352EFF1B /* Pods-HRC.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -314,6 +384,7 @@
 		};
 		346DEB88270602BD00079124 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46FCFAC565EADD401158510C /* Pods-HRC.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
