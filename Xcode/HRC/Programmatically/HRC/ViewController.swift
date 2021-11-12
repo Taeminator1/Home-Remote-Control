@@ -41,34 +41,23 @@ class ViewController: UIViewController {
         view.addSubview(tableView)
         AppDelegate.wkWebView.load(AppDelegate.request)
         _ = fetchData(AppDelegate.url)
-            .subscribe { event in
+            .observe(on: MainScheduler.instance)              // DispatchQueue.main.async { } 역할
+            .subscribe { [self] event in
+                var buttonStates: [Bool] = buttons.map { $0.isOn }
+                
                 switch event {
                 case .next(let htmlFromURL):
-                    var index: Int = 0
-                    var tmpButtonStates: [Bool] = []
+                    isConnected = true
                     // Get String starting with "\'label" in HTML from server
-                    for i in 0 ... htmlFromURL.count {
-                        if htmlFromURL[i ..< (i + 6)] == "\'label" {
-                            tmpButtonStates.append(htmlFromURL[(i + 10) ..< (i + 15)] == "true ")
-                            
-                            index += 1
-                            if index == self.sectionData[1].contents.count { break }
-                        }
-                    }
-                    
-                    DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
-                        self.isConnected = true
-                        for i in 0 ..< self.sectionData[1].contents.count {
-                            self.buttons[i].isOn = tmpButtonStates[i]
-                        }
-                    }
+                    buttonStates = getButtonStatesInHtml(target: "\'label'", html: htmlFromURL)
                 case .completed:
                     print("Loaded")
-                    break
                 case .error:
-                    DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
-                        self.isConnected = false
-                    }
+                    isConnected = false
+                }
+                
+                for i in 0 ..< self.sectionData[1].contents.count {
+                    self.buttons[i].isOn = buttonStates[i]
                 }
             }
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -114,37 +103,25 @@ class ViewController: UIViewController {
     @objc func refresh(_ sender: AnyObject) {
         // Code to refresh table view
         _ = fetchData(AppDelegate.url)
-            .subscribe { event in
+            .observe(on: MainScheduler.instance)              // DispatchQueue.main.async { } 역할
+            .subscribe { [self] event in
+                var buttonStates: [Bool] = buttons.map { $0.isOn }
+                
                 switch event {
                 case .next(let htmlFromURL):
-                    var index: Int = 0
-                    var tmpButtonStates: [Bool] = []
+                    isConnected = true
                     // Get String starting with "\'label" in HTML from server
-                    for i in 0 ... htmlFromURL.count {
-                        if htmlFromURL[i ..< (i + 6)] == "\'label" {
-                            tmpButtonStates.append(htmlFromURL[(i + 10) ..< (i + 15)] == "true ")
-                            
-                            index += 1
-                            if index == self.sectionData[1].contents.count { break }
-                        }
-                    }
-                    
-                    DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
-                        self.isConnected = true
-                        for i in 0 ..< self.sectionData[1].contents.count {
-                            self.buttons[i].isOn = tmpButtonStates[i]
-                        }
-                        self.refreshControl.endRefreshing()
-                    }
+                    buttonStates = getButtonStatesInHtml(target: "\'label'", html: htmlFromURL)
                 case .completed:
-                    print("Pulled")
-                    break
+                    print("Loaded and Pulled")
                 case .error:
-                    DispatchQueue.main.async {      // UI 관련 작업을 메인 쓰레드로 보내기
-                        self.isConnected = false
-                        self.refreshControl.endRefreshing()
-                    }
+                    isConnected = false
                 }
+                
+                for i in 0 ..< self.sectionData[1].contents.count {
+                    self.buttons[i].isOn = buttonStates[i]
+                }
+                self.refreshControl.endRefreshing()
             }
     }
     
@@ -185,6 +162,23 @@ class ViewController: UIViewController {
                 task.cancel()
             }
         }
+    }
+    
+    private func getButtonStatesInHtml(target: String, html: String) -> [Bool] {
+        var index: Int = 0
+        var buttonStates: [Bool] = []
+        
+        // Get String starting with "\'label" in HTML from server
+        for i in 0 ... html.count {
+            if html[i ..< (i + target.count)] == target {
+                buttonStates.append(html[(i + 10) ..< (i + 15)] == "true ")
+                
+                index += 1
+                if index == self.sectionData[1].contents.count { break }
+            }
+        }
+        
+        return buttonStates
     }
 }
 
