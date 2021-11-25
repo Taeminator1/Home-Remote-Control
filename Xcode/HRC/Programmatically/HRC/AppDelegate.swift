@@ -14,10 +14,10 @@ import WebKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    static let url: String = PersonalInfo.strURL        // "http://..."
+    let url: String = PersonalInfo.strURL        // "http://..."
 
-    static let wkWebView = WKWebView()
-    static let request: URLRequest = URLRequest.init(url: NSURL.init(string: AppDelegate.url)! as URL)
+    let wkWebView = WKWebView()
+    lazy var request: URLRequest = URLRequest.init(url: NSURL.init(string: url)! as URL)
     
     var window: UIWindow?
 

@@ -18,6 +18,8 @@ import RxSwift
 
 class ViewController: UIViewController {
     
+    private let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     private let tableView = UITableView(frame: CGRect.zero, style: .insetGrouped)
     private let tableViewCellId = "tableViewCellId"
     
@@ -39,8 +41,8 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         view.addSubview(tableView)
-        AppDelegate.wkWebView.load(AppDelegate.request)
-        _ = fetchData(AppDelegate.url)
+        appDelegate.wkWebView.load(appDelegate.request)
+        _ = fetchData(appDelegate.url)
             .observe(on: MainScheduler.instance)              // DispatchQueue.main.async { } 역할
             .subscribe { [self] event in
                 var buttonStates: [Bool] = buttons.map { $0.isOn }
@@ -102,7 +104,7 @@ class ViewController: UIViewController {
     
     @objc func refresh(_ sender: AnyObject) {
         // Code to refresh table view
-        _ = fetchData(AppDelegate.url)
+        _ = fetchData(appDelegate.url)
             .observe(on: MainScheduler.instance)              // DispatchQueue.main.async { } 역할
             .subscribe { [self] event in
                 var buttonStates: [Bool] = buttons.map { $0.isOn }
@@ -132,8 +134,8 @@ class ViewController: UIViewController {
     
     private func javaScriptFunction(index: Int) -> Void {
         // Refer to app.js file in Server folder.
-        print(AppDelegate.wkWebView)
-        AppDelegate.wkWebView.evaluateJavaScript("buttonClicked('btn\(index + 1)');", completionHandler: { (result, error) in
+        print(appDelegate.wkWebView)
+        appDelegate.wkWebView.evaluateJavaScript("buttonClicked('btn\(index + 1)');", completionHandler: { (result, error) in
             if let anError = error {
                 print("evaluateJavaScript infoUpdate Error \(anError.localizedDescription)")
             }
