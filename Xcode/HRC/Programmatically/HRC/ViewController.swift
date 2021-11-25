@@ -49,7 +49,7 @@ class ViewController: UIViewController {
                 case .next(let htmlFromURL):
                     isConnected = true
                     // Get String starting with "\'label" in HTML from server
-                    buttonStates = getButtonStatesInHtml(target: "\'label'", html: htmlFromURL)
+                    buttonStates = getButtonStatesInHtml(target: "\'label", html: htmlFromURL)
                 case .completed:
                     print("Loaded")
                 case .error:
@@ -111,7 +111,7 @@ class ViewController: UIViewController {
                 case .next(let htmlFromURL):
                     isConnected = true
                     // Get String starting with "\'label" in HTML from server
-                    buttonStates = getButtonStatesInHtml(target: "\'label'", html: htmlFromURL)
+                    buttonStates = getButtonStatesInHtml(target: "\'label", html: htmlFromURL)
                 case .completed:
                     print("Loaded and Pulled")
                 case .error:
