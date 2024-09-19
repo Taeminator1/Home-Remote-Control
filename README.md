@@ -9,9 +9,11 @@
 # 소개
 인터넷을 이용해 NodeMCU(아두이노)와 iOS 앱을 연결한다. iOS 앱을 통해 서버의 상태를 변경하면, NodeMCU는 변경된 상태를 읽어, NodeMCU와 연결된 다양한 기기를 조작할 수 있다. 
 
-![diagram](https://user-images.githubusercontent.com/68379110/130054789-6b2a9c9f-0c57-44c7-ad3e-a204f0c8cc3d.png)
+<img width="800" alt="Diagram" src="https://user-images.githubusercontent.com/68379110/130054789-6b2a9c9f-0c57-44c7-ad3e-a204f0c8cc3d.png">
 
 # 개발 정보
+<img width="800" alt="Pasted Graphic 1" src="https://github.com/user-attachments/assets/ec556e5c-2d77-426a-b58e-d32f9b384478">
+
 - FW for NodeMCU
     - Directory: /Arduino
     - Language: C++
